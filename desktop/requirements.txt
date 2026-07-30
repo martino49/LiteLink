@@ -1,0 +1,3 @@
+PySide6>=6.5.0
+websockets>=12.0
+watchdog>=3.0.0
