@@ -22,7 +22,16 @@ async def handle_connection(websocket):
             try:
                 data = json.loads(raw)
                 msg_type = data.get("type", "unknown")
-                print(f"[{msg_type}] from {addr}")
+
+                if msg_type == "notification":
+                    app = data.get("app", "?")
+                    title = data.get("title", "")
+                    text = data.get("text", "")
+                    print(f"\n[{app}] {title}")
+                    if text:
+                        print(f"    {text}")
+                else:
+                    print(f"[{msg_type}] from {addr}")
 
                 # TODO: route to GUI or process accordingly
                 # For now, echo received status

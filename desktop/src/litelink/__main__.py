@@ -1,5 +1,7 @@
 """Entry point for python -m litelink"""
 
+import asyncio
+
 from litelink.server import start_server
 
 
@@ -9,7 +11,7 @@ def main():
     print("Press Ctrl+C to stop.\n")
 
     try:
-        start_server()
+        asyncio.run(start_server())
     except KeyboardInterrupt:
         print("\nLiteLink stopped.")
 

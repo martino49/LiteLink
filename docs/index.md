@@ -2,6 +2,7 @@
 
 ## Contents
 
+- **[AI.md](../AI.md)** — READ FIRST if you are an AI agent: working toolchain, protocol, gotchas, verification recipe.
 - **[setup.md](setup.md)** — Step-by-step installation and first-run guide for desktop and phone.
 - **[architecture.md](architecture.md)** — System design, component diagram, data flow, and WebSocket protocol.
 - **[features.md](features.md)** — Complete feature inventory with platform ownership and build status.

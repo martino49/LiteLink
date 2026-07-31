@@ -28,4 +28,12 @@
         android:layout_height="wrap_content"
         android:text="Enable Notification Mirroring" />
 
+    <TextView
+        android:id="@+id/statusText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Disconnected"
+        android:gravity="center"
+        android:layout_marginTop="16dp" />
+
 </LinearLayout>

@@ -6,6 +6,7 @@ plugins {
 android {
     namespace = "com.yourname.litelinkcompanion"
     compileSdk = 34
+    buildToolsVersion = "36.0.0"
 
     defaultConfig {
         applicationId = "com.yourname.litelinkcompanion"

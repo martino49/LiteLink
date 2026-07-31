@@ -87,12 +87,12 @@ LiteLink/
 
 | Phase | Features | Status |
 |-------|----------|--------|
-| 1 | Screen mirroring, auto-connect, WebSocket server | 🟡 Planned |
-| 2 | Folder sync, file explorer, media offloader | ⬜ |
-| 3 | Notifications, clipboard, find my phone | ⬜ |
-| 4 | Debloat, battery dashboard, SMS backup | ⬜ |
-| 5 | M-Pesa tracker, USSD, tether toggle | ⬜ |
-| 6 | System tray, hotkeys, themes, portable build | ⬜ |
+| 1 | Auto-connect, secure transport (WSS + pairing), screen mirroring, phone-as-input | 🟡 WebSocket hub + reconnect live |
+| 2 | Drag & drop files, file explorer, folder sync, APK installer/extractor | ⬜ |
+| 3 | Notifications (built), quick reply, clipboard, call popups, notification history | 🟡 Notification mirror done |
+| 4 | Debloat, battery dashboard, SMS backup, anti-theft pack | ⬜ |
+| 5 | M-Pesa tracker, USSD, tether toggle, signal logger, offline maps | ⬜ |
+| 6 | Remote camera/webcam, screen recorder, macros, audio streaming, tray, hotkeys, themes, portable | ⬜ |
 
 ## License
 
