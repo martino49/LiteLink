@@ -42,3 +42,6 @@ Thumbs.db
 desktop/bin/
 *.exe
 !scripts/*.bat
+
+# LiteLink runtime data (TLS cert, pairing code)
+desktop/data/

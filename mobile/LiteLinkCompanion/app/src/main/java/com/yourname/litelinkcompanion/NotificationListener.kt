@@ -4,6 +4,8 @@ import android.app.Notification
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
+import com.yourname.litelinkcompanion.commands.CommandCenter
+import com.yourname.litelinkcompanion.commands.MpesaModule
 
 class NotificationListener : NotificationListenerService() {
 
@@ -14,7 +16,15 @@ class NotificationListener : NotificationListenerService() {
         val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: ""
         val text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
         Log.d("LiteLink", "Notification: $pkg | $title | $text")
-        WebSocketManager.sendNotification(appLabel(pkg), title, text)
+
+        // Feed SMS-app notifications through the M-Pesa parser as a fallback
+        // when the SMS receiver isn't granted the READ_SMS permission.
+        MpesaModule.ingestNotificationBody((title + " " + text).trim())
+
+        val app = CommandCenter.getContext()
+        if (app != null) {
+            WebSocketManager.sendNotification(appLabel(pkg), title, text)
+        }
     }
 
     override fun onNotificationRemoved(sbn: StatusBarNotification?) {

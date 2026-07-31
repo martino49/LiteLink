@@ -3,8 +3,16 @@
 Runs adb as a subprocess. All functions return structured results.
 """
 
-import subprocess
 import re
+import subprocess
+
+from .tools import find_adb
+
+
+def adb_binary():
+    """Resolve the adb executable to use."""
+    path = find_adb()
+    return path if path else "adb"
 
 
 def run_adb_command(command):
@@ -16,7 +24,7 @@ def run_adb_command(command):
     Returns:
         Tuple of (stdout, stderr, returncode)
     """
-    full = ["adb"] + command
+    full = [adb_binary()] + command
     try:
         r = subprocess.run(
             full, capture_output=True, text=True, timeout=10
@@ -26,6 +34,29 @@ def run_adb_command(command):
         return "", "Timeout", -1
     except FileNotFoundError:
         return "", "ADB not found", -1
+
+
+def setup_usb_reverse(port=8765):
+    """Forward the phone's localhost:<port> to the desktop via USB.
+
+    This powers the USB fallback feature: the companion app connects to
+    wss://localhost:<port> over the USB cable when Wi-Fi is unavailable.
+
+    Returns: list of (serial, ok).
+    """
+    out, err, code = run_adb_command(["devices"])
+    results = []
+    if code != 0:
+        return results
+    for line in out.splitlines():
+        parts = line.split()
+        if len(parts) == 2 and parts[1] == "device":
+            serial = parts[0]
+            _, _, rc = run_adb_command(
+                ["-s", serial, "reverse", f"tcp:{port}", f"tcp:{port}"]
+            )
+            results.append((serial, rc == 0))
+    return results
 
 
 def get_device_state():

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="teal_500">#009688</color>
+    <color name="teal_700">#00796B</color>
+    <color name="teal_100">#B2DFDB</color>
+    <color name="ink">#263238</color>
+    <color name="muted">#607D8B</color>
+    <color name="card">#FFFFFF</color>
+    <color name="danger">#C62828</color>
+    <color name="success">#2E7D32</color>
+    <color name="bg">#F2F5F5</color>
+    <color name="pill_green">#DCEDC8</color>
+    <color name="pill_red">#FFCDD2</color>
+    <color name="pill_grey">#ECEFF1</color>
+</resources>
