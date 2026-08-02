@@ -4,7 +4,7 @@ build-backend = "setuptools.backends._legacy:_Backend"
 
 [project]
 name = "litelink"
-version = "0.1.0"
+version = "1.0.0"
 description = "Bridge your Android phone and laptop"
 requires-python = ">=3.11"
 dependencies = [

@@ -23,7 +23,22 @@ class NotificationListener : NotificationListenerService() {
 
         val app = CommandCenter.getContext()
         if (app != null) {
-            WebSocketManager.sendNotification(appLabel(pkg), title, text)
+            val label = appLabel(pkg)
+            val isSystem = try {
+                (packageManager.getApplicationInfo(pkg, 0).flags
+                    and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
+            } catch (e: Exception) {
+                false
+            }
+            if (NotificationFilter.isBlocked(app, label, isSystem)) {
+                Log.d("LiteLink", "Notification blocked by filter: $label")
+                return
+            }
+            ActivityLog.log(app, "\uD83D\uDD14", "$label: $title")
+            ActivityLog.bumpNotifications(app)
+            NotificationStore.add(app, label, title, text)
+            LogStore.log(app, LogStore.LEVEL_INFO, "Mirrored notification from $label: $title")
+            WebSocketManager.sendNotification(label, title, text)
         }
     }
 

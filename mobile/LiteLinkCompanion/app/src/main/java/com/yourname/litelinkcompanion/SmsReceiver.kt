@@ -8,7 +8,7 @@ import android.telephony.SmsMessage
 import com.yourname.litelinkcompanion.commands.CommandBridge
 import com.yourname.litelinkcompanion.commands.MpesaModule
 
-/** Captures incoming SMS for M-Pesa parsing and quick replies. */
+/** Captures incoming SMS: forwards to the PC, parses M-Pesa, stores for quick replies. */
 class SmsReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -21,5 +21,10 @@ class SmsReceiver : BroadcastReceiver() {
         val body = messages.joinToString("") { it.messageBody ?: "" }
         if (sender.isNotBlank()) CommandBridge.lastSender = sender
         MpesaModule.ingestMessage(context, body)
+
+        // Mirror the SMS to the PC as a notification (same as app notifications).
+        if (WebSocketManager.isConnected) {
+            WebSocketManager.sendNotification("SMS", sender.ifBlank { "Message" }, body)
+        }
     }
 }

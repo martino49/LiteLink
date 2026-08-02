@@ -23,7 +23,13 @@ object CameraModule {
     fun register(app: Context) {
         CommandCenter.register("camera.capture") { ctx, id, params ->
             try {
-                capturePhoto(app, ctx, id, params.optString("dir", "camera"))
+                capturePhoto(
+                    app,
+                    ctx,
+                    id,
+                    params.optString("dir", "camera"),
+                    params.optString("facing", "back")
+                )
             } catch (e: Exception) {
                 Log.e(TAG, "capture failed", e)
                 ctx.fail(id, e.message ?: "capture failed")
@@ -31,9 +37,10 @@ object CameraModule {
         }
     }
 
-    private fun capturePhoto(app: Context, ctx: CommandContext, id: String, dir: String) {
+    private fun capturePhoto(app: Context, ctx: CommandContext, id: String, dir: String, facing: String) {
         val cm = app.getSystemService(Context.CAMERA_SERVICE) as CameraManager
-        val cameraId = findCamera(cm) ?: throw IllegalStateException("no camera available")
+        val wantFront = facing.equals("front", ignoreCase = true)
+        val cameraId = findCamera(cm, wantFront) ?: throw IllegalStateException("no camera available")
         val outDir = File(app.cacheDir, "camera").apply { mkdirs() }
         val outFile = File(outDir, "photo_${System.currentTimeMillis()}.jpg")
 
@@ -99,11 +106,12 @@ object CameraModule {
         }, handler)
     }
 
-    private fun findCamera(cm: CameraManager): String? {
+    private fun findCamera(cm: CameraManager, front: Boolean): String? {
         for (id in cm.cameraIdList) {
             val chars = cm.getCameraCharacteristics(id)
             val facing = chars.get(CameraCharacteristics.LENS_FACING)
-            if (facing == CameraCharacteristics.LENS_FACING_BACK) return id
+            if (front && facing == CameraCharacteristics.LENS_FACING_FRONT) return id
+            if (!front && facing == CameraCharacteristics.LENS_FACING_BACK) return id
         }
         return cm.cameraIdList.firstOrNull()
     }

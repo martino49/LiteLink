@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/bg">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/voiceToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/card"
+        app:title="Voice Commands"
+        app:navigationIcon="@drawable/ic_back"
+        app:titleTextColor="@color/ink" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="24dp">
+
+        <TextView
+            android:id="@+id/voiceStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap the mic and speak a command"
+            android:textSize="16sp"
+            android:textColor="@color/ink"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/voiceResult"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="14sp"
+            android:textColor="@color/muted"
+            android:gravity="center"
+            android:layout_marginTop="16dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/voiceMicButton"
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:layout_marginTop="24dp"
+            android:text="🎤"
+            android:textSize="36sp"
+            app:cornerRadius="48dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Examples: Open Chrome · Play music · Shutdown · Search for cats"
+            android:textSize="12sp"
+            android:textColor="@color/muted"
+            android:gravity="center"
+            android:layout_marginTop="24dp" />
+    </LinearLayout>
+</LinearLayout>

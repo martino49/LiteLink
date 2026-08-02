@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/bg"
+    android:paddingBottom="24dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All features"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/ink"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="8dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Phone hub"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/muted"
+        android:letterSpacing="0.12"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetPhoneHub"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDCF1  Phone Hub (Home / Notifications / Files / Settings)"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Monitoring"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/muted"
+        android:letterSpacing="0.12"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetBattery"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDD0B  Battery Health"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetMpesa"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDCB0  M-Pesa Tracker"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetSignal"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDCE1  Signal Logger"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Messaging &amp; backup"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/muted"
+        android:letterSpacing="0.12"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetArchive"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDCEC  SMS &amp; Call Archive"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetSyncFolders"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDCC1  Sync Folders"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="System"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/muted"
+        android:letterSpacing="0.12"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetDebloat"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDEE1\uFE0F  Debloat Guardian"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetMaintenance"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDD27  Maintenance Mode"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetApk"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDCE6  APK Installer"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetUssd"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\u2B50  USSD Shortcut"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetCamera"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDCF7  Camera Remote"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PC Remote"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/muted"
+        android:letterSpacing="0.12"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetMedia"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83C\uDFB5  Media Controller"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetPower"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\u26A1  PC Power"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetPcFiles"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDCC1  PC Files"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetMirror"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDDA5\uFE0F  Screen Mirror"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Connection &amp; app"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:textColor="@color/muted"
+        android:letterSpacing="0.12"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetPairing"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDD17  Pairing &amp; Devices"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetLogs"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDD0D  Log Viewer"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetFilter"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\uD83D\uDEAB  Notification Filter"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/sheetAbout"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:text="\u2139\uFE0F  About LiteLink"
+        android:textSize="14sp"
+        android:textColor="@color/ink" />
+
+</LinearLayout>

@@ -5,17 +5,17 @@
         android:icon="@drawable/ic_home"
         android:title="Home" />
     <item
-        android:id="@+id/nav_messages"
-        android:icon="@drawable/ic_message"
-        android:title="Messages" />
+        android:id="@+id/nav_notifications"
+        android:icon="@drawable/ic_ring"
+        android:title="Notify" />
+    <item
+        android:id="@+id/nav_features"
+        android:icon="@drawable/ic_compass"
+        android:title="Features" />
     <item
         android:id="@+id/nav_files"
         android:icon="@drawable/ic_files"
         android:title="Files" />
-    <item
-        android:id="@+id/nav_tools"
-        android:icon="@drawable/ic_tools"
-        android:title="Tools" />
     <item
         android:id="@+id/nav_settings"
         android:icon="@drawable/ic_settings"

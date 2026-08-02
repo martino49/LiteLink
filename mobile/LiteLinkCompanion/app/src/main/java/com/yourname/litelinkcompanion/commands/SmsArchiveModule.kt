@@ -90,6 +90,34 @@ object SmsArchiveModule {
         return out
     }
 
+    /** Recent call log entries as JSON for local UI display (empty if permission missing). */
+    fun listRecentCalls(app: Context, limit: Int = 50): List<JSONObject> {
+        val out = mutableListOf<JSONObject>()
+        if (ContextCompat.checkSelfPermission(app, android.Manifest.permission.READ_CALL_LOG)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            return out
+        }
+        val ts = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.US)
+        val cursor: Cursor? = app.contentResolver.query(
+            CallLog.Calls.CONTENT_URI, null, null, null, "${CallLog.Calls.DATE} DESC LIMIT $limit"
+        )
+        cursor?.use {
+            while (it.moveToNext()) {
+                val date = it.getLong(it.getColumnIndexOrThrow(CallLog.Calls.DATE))
+                val type = it.getInt(it.getColumnIndexOrThrow(CallLog.Calls.TYPE))
+                out.add(JSONObject().apply {
+                    put("date", ts.format(Date(date)))
+                    put("number", it.getString(it.getColumnIndexOrThrow(CallLog.Calls.NUMBER)).orEmpty())
+                    put("name", it.getString(it.getColumnIndexOrThrow(CallLog.Calls.CACHED_NAME)) ?: "")
+                    put("type", type)
+                    put("duration", it.getLong(it.getColumnIndexOrThrow(CallLog.Calls.DURATION)))
+                })
+            }
+        }
+        return out
+    }
+
     private fun readSms(app: Context): List<String> {
         val header = "date,address,person,body,type"
         val lines = mutableListOf(header)

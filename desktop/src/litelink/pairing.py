@@ -10,6 +10,20 @@ import secrets
 from pathlib import Path
 
 CODE_FILE = "pairing_code.txt"
+ID_FILE = "device_id.txt"
+
+
+def get_device_id(data_dir: Path) -> str:
+    """Return a stable, short, human-friendly device id (persisted)."""
+    path = data_dir / ID_FILE
+    if path.exists():
+        return path.read_text().strip()
+    data_dir.mkdir(parents=True, exist_ok=True)
+    # 8 hex chars, grouped 4-4, e.g. "A1B2-C3D4"
+    raw = secrets.token_hex(4).upper()
+    dev_id = f"{raw[:4]}-{raw[4:]}"
+    path.write_text(dev_id)
+    return dev_id
 
 
 def get_pairing_code(data_dir: Path) -> str:

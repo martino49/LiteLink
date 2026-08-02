@@ -1,0 +1,1653 @@
+Perfect. Let's do this **properly and completely**. I will list **every screen** for the Android app with:
+
+- **Full description**
+- **UI elements** (what the user sees)
+- **Animations** (transitions, micro-interactions)
+- **User interactions** (what happens when they tap/swipe)
+- **State changes** (loading, empty, error states)
+
+We will go through them **one by one**, and you can add or modify anything as we go.
+
+Let's start from the very beginning:
+
+---
+
+# 📱 LITELINK COMPANION APP – COMPLETE SCREEN INVENTORY
+
+---
+
+## SCREEN 1: SPLASH SCREEN (Loading Screen)
+
+### 🎯 Purpose
+- The first screen users see when they open the app.
+- Creates a strong first impression and establishes the LiteLink brand.
+- Handles initialization in the background.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│                                      │
+│                                      │
+│           ┌──────────────┐           │
+│           │              │           │
+│           │   LOGO       │           │
+│           │   (Center)   │           │
+│           │              │           │
+│           └──────────────┘           │
+│                                      │
+│         L I T E L I N K              │
+│                                      │
+│    ●  ●  ●  ●  ●  (Loading Dots)    │
+│                                      │
+│        "Connecting to service..."    │
+│                                      │
+│                                      │
+│            v1.0.0                    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Logo** | Centered, large LiteLink logo (vector drawable). |
+| **App Name** | "LiteLink" in bold, below the logo. |
+| **Loading Indicator** | 5 animated dots that pulse sequentially (like a wave). |
+| **Status Text** | Changes dynamically: "Initializing..." → "Checking permissions..." → "Connecting..." |
+| **Version Number** | Bottom right corner, small text. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Logo Fade-In** | Logo fades in over 800ms with a subtle scale-up (1.0 → 1.1 → 1.0). |
+| **App Name Slide-Up** | App name slides up from below the logo with a 300ms delay. |
+| **Loading Dots Wave** | 5 dots pulse in sequence (dot 1 → dot 2 → dot 3 → dot 4 → dot 5), then repeat. Each dot scales up and down. |
+| **Status Text Fade** | Status text fades in/out when changing messages. |
+| **Smooth Transition** | When initialization is complete, the screen fades out and transitions to the next screen with a 300ms crossfade. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **None** | This screen is passive. The user waits for 2-3 seconds while initialization completes. |
+| **Tap (ignored)** | Taps are ignored during loading to prevent crashes. |
+
+### 🔄 State Changes
+| State | What Happens |
+| :--- | :--- |
+| **Loading** | Shows the loading animation and status text. |
+| **Error (No Network)** | Shows a red error message: "No internet connection. Please connect to Wi-Fi." with a retry button. |
+| **Error (No Permissions)** | Shows a yellow warning: "Permissions required. Grant access to continue." with a "Grant Permissions" button. |
+| **Success** | After 2-3 seconds, automatically transitions to: |
+| └─ **First Launch** | → **Onboarding Screen** (Screen 2). |
+| └─ **Returning User** | → **Home Screen** (Screen 4). |
+
+### 🧠 What Happens in the Background
+1. Loads saved settings from `SharedPreferences` (IP address, encryption key, paired devices).
+2. Checks if the app has Notification Access permission.
+3. Checks if the phone is connected to Wi-Fi.
+4. Attempts to auto-connect to the last known laptop IP (if saved).
+5. Logs the initialization status for debugging.
+
+---
+
+## SCREEN 2: ONBOARDING SCREEN (First-Time Setup)
+
+### 🎯 Purpose
+- Walks first-time users through setup step-by-step.
+- Explains what LiteLink does and why permissions are needed.
+- Ensures all required permissions are granted before the user starts.
+
+### 📐 Layout (Page 1 of 4 – Welcome)
+```
+┌──────────────────────────────────────┐
+│                                      │
+│         ┌────────────────┐           │
+│         │   ILLUSTRATION │           │
+│         │   (Phone + PC) │           │
+│         └────────────────┘           │
+│                                      │
+│       Welcome to LiteLink!           │
+│                                      │
+│   Turn your Redmi 14 C into a       │
+│   productivity powerhouse. Connect  │
+│   your phone to your laptop and     │
+│   sync notifications, files, and    │
+│   more.                             │
+│                                      │
+│                                      │
+│    ○  ●  ○  ○  ○  (Page Dots)      │
+│                                      │
+│        [  SKIP  ]  [  NEXT  → ]    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements (Page 1 – Welcome)
+| Element | Description |
+| :--- | :--- |
+| **Illustration** | A vector graphic showing a phone connected to a laptop (Wi-Fi icon in between). |
+| **Title** | "Welcome to LiteLink!" (bold, large). |
+| **Description** | Brief explanation of what LiteLink does. |
+| **Page Dots** | 4 dots indicating progress (Page 1 of 4). |
+| **Skip Button** | "Skip" → jumps directly to the Home Screen (Screen 4). |
+| **Next Button** | "Next →" → transitions to Page 2. |
+
+### 📋 UI Elements (Page 2 – Permissions)
+| Element | Description |
+| :--- | :--- |
+| **Illustration** | A vector graphic showing a phone with a shield/lock icon. |
+| **Title** | "Grant Permissions". |
+| **Description** | "LiteLink needs these permissions to work properly:" |
+| **Permission List** | |
+| └─ **Notification Access** | "Read notifications from apps like WhatsApp and M-Pesa." |
+| └─ **Install Unknown Apps** | "Install APKs from your laptop." |
+| └─ **Draw Over Apps** | "Capture USSD responses." |
+| └─ **Files & Media** | "Access your files for sync and transfer." |
+| **Permission Status** | Each permission shows a status: ❌ Not Granted / ✅ Granted. |
+| **Grant Button** | "Grant Permissions" → opens system settings. |
+| **Page Dots** | 4 dots indicating progress (Page 2 of 4). |
+| **Back Button** | "← Back" → returns to Page 1. |
+| **Next Button** | "Next →" (only enabled when all permissions are granted). |
+
+### 📋 UI Elements (Page 3 – Connect)
+| Element | Description |
+| :--- | :--- |
+| **Illustration** | A vector graphic showing a laptop with a Wi-Fi signal. |
+| **Title** | "Connect to Your Laptop". |
+| **Description** | "Enter your laptop's IP address to connect." |
+| **IP Input Field** | Input field with placeholder: "e.g., 192.168.1.100". |
+| **Scan Button** | "📷 Scan QR Code" → opens camera to scan pairing QR code. |
+| **Status Text** | Shows connection status: "Not connected" / "Connecting..." / "✅ Connected!". |
+| **Page Dots** | 4 dots indicating progress (Page 3 of 4). |
+| **Back Button** | "← Back" → returns to Page 2. |
+| **Next Button** | "Next →" (only enabled when connected). |
+| **Skip Button** | "Skip for now" → jumps to Home Screen (can connect later). |
+
+### 📋 UI Elements (Page 4 – Complete)
+| Element | Description |
+| :--- | :--- |
+| **Illustration** | A vector graphic showing a checkmark/celebration icon. |
+| **Title** | "All Set! 🎉". |
+| **Description** | "You're ready to use LiteLink. Tap Get Started to begin." |
+| **Summary** | Bullet points summarizing what's set up: |
+| └─ | "✅ Notifications will appear on your laptop." |
+| └─ | "✅ Files can be synced between devices." |
+| └─ | "✅ You can control your phone from your PC." |
+| **Get Started Button** | "Get Started" → transitions to Home Screen. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Page Transition** | Horizontal slide transition (left → right) when moving forward. |
+| **Illustration Bounce** | The illustration bounces slightly when the page loads. |
+| **Permission Status** | When a permission is granted, the icon animates from ❌ to ✅ with a scale-up effect. |
+| **Button Enable** | The "Next" button scales up when it becomes enabled. |
+| **Page Dots** | The active dot pulses gently. |
+| **Success Confetti** | On Page 4, tiny confetti particles fall from the top when "All Set!" appears. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Swipe Left** | Moves to the next page (if available). |
+| **Swipe Right** | Moves to the previous page (if available). |
+| **Tap Next** | Moves to the next page. |
+| **Tap Skip** | Jumps directly to Home Screen. |
+| **Tap Grant Permissions** | Opens system settings for the requested permission. |
+| **Tap Scan QR Code** | Opens camera to scan a QR code. |
+| **Tap Get Started** | Transitions to Home Screen. |
+
+### 🔄 State Changes
+| State | What Happens |
+| :--- | :--- |
+| **Permission Denied** | Shows a red warning: "Permission denied. Please grant access in settings." |
+| **Connection Failed** | Shows a red warning: "Failed to connect. Check your IP address and try again." |
+| **Connection Success** | Shows a green checkmark and automatically enables the "Next" button. |
+
+---
+
+## SCREEN 3: PERMISSION REQUEST SCREEN (System Overlay)
+
+### 🎯 Purpose
+- Opens system settings when the user needs to grant a specific permission.
+- Not a full screen – it's a dialog that overlays the current screen.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│                                      │
+│   ┌────────────────────────────┐    │
+│   │  🔔  Permission Required    │    │
+│   │                             │    │
+│   │  "LiteLink needs access to │    │
+│   │   your notifications to    │    │
+│   │   mirror them to your PC." │    │
+│   │                             │    │
+│   │  ┌──────────────────────┐  │    │
+│   │  │  OPEN SETTINGS       │  │    │
+│   │  └──────────────────────┘  │    │
+│   │                             │    │
+│   │  ┌──────────────────────┐  │    │
+│   │  │  CANCEL              │  │    │
+│   │  └──────────────────────┘  │    │
+│   └────────────────────────────┘    │
+│                                      │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Icon** | Permission icon (🔔 for notifications, 📷 for camera, etc.). |
+| **Title** | "Permission Required". |
+| **Description** | Explains why the permission is needed. |
+| **Open Settings Button** | Opens the system settings screen for the specific permission. |
+| **Cancel Button** | Dismisses the dialog (user can try again later). |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Dialog Fade-In** | The dialog fades in with a subtle scale-up (0.9 → 1.0) over 300ms. |
+| **Background Dim** | The background gradually dims (20% → 70% opacity) over 300ms. |
+| **Button Press** | The button has a ripple effect when tapped. |
+
+---
+
+## SCREEN 4: HOME SCREEN (Dashboard)
+
+### 🎯 Purpose
+- The main landing screen after setup.
+- Shows device status, quick stats, and quick actions.
+- Provides a real-time overview of what LiteLink is doing.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  🔗 Connected      🔋 87%   📱 4G  │
+│  192.168.1.100                       │
+├──────────────────────────────────────┤
+│                                      │
+│   ┌─────────────────────────────┐    │
+│   │   🔍  Search or command...   │    │
+│   └─────────────────────────────┘    │
+│                                      │
+│   ╔═══════════════════════════╗      │
+│   ║  🔄  SERVICE ENABLED      ║      │
+│   ║  Notifications: ON        ║      │
+│   ║  Folder Sync: ON          ║      │
+│   ║  ────────────────────    ║      │
+│   ║  [  OFF  ]  [  ON  ✅ ]  ║      │
+│   ╚═══════════════════════════╝      │
+│                                      │
+│   📊  Stats                         │
+│   ┌──────┐ ┌──────┐ ┌──────┐       │
+│   │🔔 23  │ │📁 15  │ │📱 12%│       │
+│   │Notifications│Syncs│Storage│       │
+│   └──────┘ └──────┘ └──────┘       │
+│                                      │
+│   🚀  Quick Actions                  │
+│   ┌──────┐ ┌──────┐ ┌──────┐       │
+│   │🖥️    │ │🔔    │ │📁    │       │
+│   │Mirror │ │Notify│ │Sync  │       │
+│   └──────┘ └──────┘ └──────┘       │
+│   ┌──────┐ ┌──────┐                 │
+│   │🔍    │ │⚙️    │                 │
+│   │Find   │ │Settings│              │
+│   └──────┘ └──────┘                 │
+│                                      │
+│   📋  Recent Activity                │
+│   ┌─────────────────────────────┐    │
+│   │  📱  WhatsApp: "Hi"          │    │
+│   │  ⏱  2 min ago               │    │
+│   ├─────────────────────────────┤    │
+│   │  📁  Sync: notes.txt → PC    │    │
+│   │  ⏱  5 min ago               │    │
+│   ├─────────────────────────────┤    │
+│   │  🔔  3 new notifications     │    │
+│   │  ⏱  8 min ago               │    │
+│   └─────────────────────────────┘    │
+│                                      │
+│  [📱] [🔔] [📁] [⚙️]  (Bottom Nav)  │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Status Bar** | |
+| └─ **Connection Status** | 🟢 Connected / 🟡 Connecting / 🔴 Disconnected. |
+| └─ **Laptop IP** | Shows the connected laptop's IP address. |
+| └─ **Battery** | Shows phone battery percentage. |
+| └─ **Network Type** | Shows 4G/5G/Wi-Fi icon. |
+| **Search Bar** | "🔍 Search or command..." – search notifications, files, or send a command (e.g., "Open WhatsApp"). |
+| **Service Card** | |
+| └─ **Service Enabled** | Master toggle switch (ON/OFF). |
+| └─ **Status** | Shows if notifications and folder sync are active. |
+| **Stats Cards** | |
+| └─ **Notifications** | Shows total notifications received today. |
+| └─ **Syncs** | Shows total files synced today. |
+| └─ **Storage** | Shows used storage percentage on phone. |
+| **Quick Actions** | |
+| └─ **Mirror** | Sends command to desktop to open scrcpy. |
+| └─ **Notify** | Opens Notifications Screen (Screen 6). |
+| └─ **Sync** | Opens Sync Folders Screen (Screen 8). |
+| └─ **Find** | Rings the phone (Find My Phone). |
+| └─ **Settings** | Opens Settings Screen (Screen 5). |
+| **Recent Activity** | |
+| └─ **Each Item** | Shows icon, description, and timestamp. |
+| └─ **Tap** | Tapping an item opens the relevant screen (e.g., notification → Notifications Screen). |
+| **Bottom Navigation** | |
+| └─ **Home** | This screen. |
+| └─ **Notifications** | Screen 6. |
+| └─ **Files** | Screen 7. |
+| └─ **Settings** | Screen 5. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Status Bar Pulse** | The connection status dot pulses green when connected. |
+| **Service Toggle** | The master toggle slides smoothly with a spring animation. |
+| **Stats Card Flip** | Stats cards flip subtly when the numbers update. |
+| **Quick Action Scale** | Quick action buttons scale up (1.0 → 1.05 → 1.0) when pressed. |
+| **Recent Activity Slide** | New activity items slide in from the right. |
+| **Bottom Nav Selection** | The selected bottom nav icon scales up and changes color smoothly. |
+| **Pull-to-Refresh** | A circular progress indicator appears when pulling down to refresh. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Search** | Opens a search overlay. |
+| **Toggle Service** | Enables/disables the entire LiteLink service. |
+| **Tap Mirror** | Sends command to desktop → opens scrcpy. |
+| **Tap Notify** | Navigates to Notifications Screen (Screen 6). |
+| **Tap Sync** | Navigates to Sync Folders Screen (Screen 8). |
+| **Tap Find** | Rings the phone (with a confirmation dialog). |
+| **Tap Settings** | Navigates to Settings Screen (Screen 5). |
+| **Tap Recent Activity** | Navigates to the relevant screen. |
+| **Pull to Refresh** | Refreshes all data (connection status, stats, recent activity). |
+
+### 🔄 State Changes
+| State | What Happens |
+| :--- | :--- |
+| **Connected** | Status bar shows 🟢 Connected. Stats update in real-time. |
+| **Disconnected** | Status bar shows 🔴 Disconnected. Show a warning card: "Not connected to laptop. Tap to reconnect." |
+| **Service Enabled** | The service toggle is ON. All features are active. |
+| **Service Disabled** | The service toggle is OFF. Show a dimmed overlay: "Service is paused. Tap to enable." |
+| **No Notifications** | Stats card shows "0" with a gray icon. |
+| **New Notification** | The notification count updates with a bounce animation. |
+
+### 📱 Bottom Navigation
+```
+[🏠 Home] [🔔 Notifications] [📁 Files] [⚙️ Settings]
+```
+- **Home** → Screen 4 (Home Screen)
+- **Notifications** → Screen 6 (Notifications Screen)
+- **Files** → Screen 7 (Files Screen)
+- **Settings** → Screen 5 (Settings Screen)
+
+---
+
+## SCREEN 5: SETTINGS SCREEN
+
+### 🎯 Purpose
+- All configuration options for the companion app.
+- Organized into sections for easy navigation.
+- Allows users to customize their experience.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  ←  Settings                         │
+├──────────────────────────────────────┤
+│                                      │
+│  ═══ CONNECTION ═══                 │
+│  ┌─────────────────────────────┐    │
+│  │  Laptop IP        192.168.1.100│  │
+│  │  Mode              [Local ▼]  │  │
+│  │  VPS Host          litelink.io│  │
+│  │  VPS Port          8765      │  │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ═══ NOTIFICATIONS ═══              │
+│  ┌─────────────────────────────┐    │
+│  │  Enable Mirroring    [ON ✅] │    │
+│  │  Show Full Text      [ON ✅] │    │
+│  │  Filter Apps         [12 ▼] │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ═══ FOLDER SYNC ═══                │
+│  ┌─────────────────────────────┐    │
+│  │  Enable Sync          [ON ✅] │    │
+│  │  Sync Interval         [5s ▼] │    │
+│  │  Manage Folders        [3 ▼] │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ═══ PRIVACY ═══                    │
+│  ┌─────────────────────────────┐    │
+│  │  Encryption            [ON ✅] │    │
+│  │  Device ID      ABC-123-XYZ  │    │
+│  │  Pairing Code       [Show]   │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ═══ BATTERY ═══                    │
+│  ┌─────────────────────────────┐    │
+│  │  Battery Saver         [OFF] │    │
+│  │  Low Battery Alert    [15%] │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ═══ DEBUG ═══                      │
+│  ┌─────────────────────────────┐    │
+│  │  Verbose Logging        [OFF] │    │
+│  │  View Logs              [▶️]  │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ═══ ABOUT ═══                      │
+│  ┌─────────────────────────────┐    │
+│  │  Version            v1.0.0   │    │
+│  │  Check Updates        [▶️]   │    │
+│  │  Open Source Licenses  [▶️]  │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  🔴  Reset All Settings     │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  [📱] [🔔] [📁] [⚙️]  (Bottom Nav)  │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Section | Elements |
+| :--- | :--- |
+| **Connection** | Laptop IP (input), Mode (dropdown: Local/Cloud), VPS Host (input), VPS Port (input). |
+| **Notifications** | Enable Mirroring (toggle), Show Full Text (toggle), Filter Apps (button → opens Screen 13). |
+| **Folder Sync** | Enable Sync (toggle), Sync Interval (dropdown), Manage Folders (button → opens Screen 8). |
+| **Privacy** | Encryption (toggle), Device ID (read-only), Pairing Code (button → shows dialog). |
+| **Battery** | Battery Saver (toggle), Low Battery Alert (dropdown: 5%/10%/15%/20%). |
+| **Debug** | Verbose Logging (toggle), View Logs (button → opens Screen 16). |
+| **About** | Version (read-only), Check Updates (button), Open Source Licenses (button). |
+| **Danger Zone** | Reset All Settings (button with confirmation dialog). |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Section Expand** | Each section expands/collapses smoothly when tapped. |
+| **Toggle Animation** | Switches slide with a spring effect. |
+| **Number Badge** | Badges (e.g., "[12 ▼]") animate when updated. |
+| **Scroll Parallax** | The title bar fades out as you scroll. |
+| **Ripple Effect** | All buttons have a ripple effect on press. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Section Header** | Expands/collapses the section. |
+| **Tap Toggle** | Enables/disables the setting. |
+| **Tap Input** | Opens a dialog or keyboard for editing. |
+| **Tap Dropdown** | Opens a dropdown menu with options. |
+| **Tap Button** | Opens the relevant screen or dialog. |
+| **Long Press Device ID** | Copies the Device ID to the clipboard. |
+| **Tap Reset All** | Shows a confirmation dialog before resetting. |
+
+### 🔄 State Changes
+| State | What Happens |
+| :--- | :--- |
+| **Saving** | Shows a progress indicator while saving settings. |
+| **Saved** | Shows a green toast: "Settings saved". |
+| **Error** | Shows a red toast: "Failed to save settings". |
+| **Reset Confirmation** | Dialog: "Are you sure? All settings will be reset to default." |
+
+---
+
+## SCREEN 6: NOTIFICATIONS SCREEN
+
+### 🎯 Purpose
+- Shows all captured notifications from the phone.
+- Allows filtering, searching, and exporting.
+- Provides quick actions (reply, dismiss).
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  🔔  Notifications          [23]   │
+│  [🔍 Search...]  [▼ Filter] [⋯]   │
+├──────────────────────────────────────┤
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  📱 WhatsApp                 │    │
+│  │  Mary                        │    │
+│  │  "Hey, are you coming?"      │    │
+│  │  ⏱  2 min ago               │    │
+│  │  [Reply]  [Dismiss]          │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  💬 SMS                      │    │
+│  │  Safaricom                   │    │
+│  │  "M-PESA: KES 500 received"  │    │
+│  │  ⏱  15 min ago              │    │
+│  │  [Dismiss]                   │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  📱 Telegram                 │    │
+│  │  John                        │    │
+│  │  "📷 Image attached"         │    │
+│  │  ⏱  1 hour ago              │    │
+│  │  [Reply]  [Dismiss]          │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  🔔  No more notifications   │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  [📱] [🔔] [📁] [⚙️]  (Bottom Nav)  │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Title Bar** | "Notifications" with a count badge (e.g., [23]). |
+| **Search Bar** | "🔍 Search..." → filter notifications by keyword. |
+| **Filter Button** | "▼ Filter" → opens a dropdown to filter by app. |
+| **More Button** | "⋯" → opens a menu with "Clear All", "Export". |
+| **Notification Cards** | Each notification card has: |
+| └─ **App Icon** | The app's icon (WhatsApp, SMS, etc.). |
+| └─ **App Name** | e.g., "WhatsApp". |
+| └─ **Title** | Contact name or subject. |
+| └─ **Message Text** | The full message (truncated with "Show More"). |
+| └─ **Timestamp** | Time since the notification was received. |
+| └─ **Reply Button** | Expands to show a text input + send button. |
+| └─ **Dismiss Button** | Swipes the notification away on the phone. |
+| **Empty State** | "🔔 No notifications" with an illustration. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Notification Card Slide** | New cards slide in from the right. |
+| **Card Expand** | Tapping "Reply" expands the card to show the input field. |
+| **Swipe to Dismiss** | Swiping left/right on a card shows a "Dismiss" action (with a trash icon). |
+| **Filter Dropdown** | The filter dropdown slides down from the top. |
+| **Search Highlight** | Matching search terms are highlighted in yellow. |
+| **Counter Bounce** | The notification count badge bounces when a new notification arrives. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Notification** | Expands to show full text (if truncated). |
+| **Tap Reply** | Shows a text input and send button. |
+| **Tap Dismiss** | Swipes the notification from the phone. |
+| **Swipe Card** | Shows a "Dismiss" or "Mark as Read" action. |
+| **Tap Search** | Opens the keyboard and filters notifications in real-time. |
+| **Tap Filter** | Opens a dropdown with apps to filter by. |
+| **Tap More** | Opens a menu: "Clear All", "Export as JSON", "Export as CSV". |
+| **Long Press Card** | Selects the card for bulk actions. |
+
+### 🔄 State Changes
+| State | What Happens |
+| :--- | :--- |
+| **Loading** | Shows a progress spinner in the center. |
+| **Empty** | Shows "🔔 No notifications" with an illustration. |
+| **Filtered** | Shows only notifications from the selected app. |
+| **Searching** | Shows only notifications that contain the search keyword. |
+| **New Notification** | The card slides in and the count badge updates. |
+
+---
+
+## SCREEN 7: FILES SCREEN
+
+### 🎯 Purpose
+- Browse and manage files on the phone.
+- Navigate through internal storage and SD card.
+- Perform file operations (copy, move, delete, rename, share).
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  📁  Files                    [12%] │
+│  /sdcard/Download/                   │
+│  [🔍 Search...]  [⋮]               │
+├──────────────────────────────────────┤
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  📂  Documents       Today   │    │
+│  │  📂  Music          2 days  │    │
+│  │  📂  Pictures       1 week  │    │
+│  │  📄  report.pdf     2 MB    │    │
+│  │  📄  notes.txt      1 KB    │    │
+│  │  📄  photo.jpg      5 MB    │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  Storage: 12.3 GB used / 64 GB free │
+│  ████████░░░░░░░░░░░░░░ 19%        │
+│                                      │
+│  [📱] [🔔] [📁] [⚙️]  (Bottom Nav)  │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Title Bar** | "Files" with storage percentage. |
+| **Breadcrumb** | Shows current path (e.g., `/sdcard/Download/`). |
+| **Search Bar** | "🔍 Search..." → search for files/folders. |
+| **More Button** | "⋮" → opens a menu: "New Folder", "Refresh", "Sort By". |
+| **File/Folder List** | Each item has: |
+| └─ **Icon** | 📂 (folder) or 📄 (file). |
+| └─ **Name** | The file/folder name. |
+| └─ **Info** | File size or "Today"/"2 days ago" for folders. |
+| **Storage Bar** | Shows used/free space. |
+| **Transfer Queue** | (At the bottom, can be expanded) Shows ongoing transfers. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Folder Transition** | Tapping a folder slides the file list up/down. |
+| **File Icon** | Files have a subtle bounce when the list loads. |
+| **Storage Bar** | The storage bar animates from 0% to the current percentage. |
+| **Refresh** | A circular progress spinner appears on pull-to-refresh. |
+| **Delete Animation** | Swiping to delete shows a red background with a trash icon. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Folder** | Navigates into the folder. |
+| **Tap File** | Opens the file (if possible) or shows a preview. |
+| **Long Press File** | Selects the file for bulk actions (copy, move, delete). |
+| **Swipe File** | Shows a "Delete" action (with confirmation). |
+| **Tap Breadcrumb** | Jumps to the selected path. |
+| **Tap More** | Opens a menu: "New Folder", "Refresh", "Sort By (Name/Size/Date)". |
+| **Pull to Refresh** | Refreshes the current folder. |
+
+### 🔄 State Changes
+| State | What Happens |
+| :--- | :--- |
+| **Loading** | Shows a progress spinner. |
+| **Empty Folder** | Shows "📂 This folder is empty" with an illustration. |
+| **Searching** | Shows only files/folders matching the search query. |
+| **Transferring** | Shows a progress bar at the bottom for ongoing transfers. |
+
+---
+
+## SCREEN 8: SYNC FOLDERS SCREEN
+
+### 🎯 Purpose
+- Manage all folder sync pairs.
+- Add, remove, pause, or resume sync pairs.
+- View sync history and status.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  📁  Sync Folders                    │
+│  [🔍 Search...]  [➕ Add Pair]      │
+├──────────────────────────────────────┤
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  📂 /sdcard/Docs            │    │
+│  │  ↔  C:\Users\Documents      │    │
+│  │  🟢 Syncing (Last: 2 min)  │    │
+│  │  [Pause]  [History]  [🗑️]  │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  📂 /sdcard/Photos           │    │
+│  │  ↔  D:\Photos               │    │
+│  │  🟡 Paused                   │    │
+│  │  [Resume]  [History]  [🗑️]  │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  📂 /sdcard/Music            │    │
+│  │  ↔  E:\Music                │    │
+│  │  🔴 Error: Device offline   │    │
+│  │  [Retry]  [History]  [🗑️]  │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  [📱] [🔔] [📁] [⚙️]  (Bottom Nav)  │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Title Bar** | "Sync Folders". |
+| **Search Bar** | "🔍 Search..." → search for sync pairs. |
+| **Add Pair Button** | "➕ Add Pair" → opens a folder picker. |
+| **Sync Pair Cards** | Each card has: |
+| └─ **Phone Folder** | Path on the phone (e.g., `/sdcard/Docs`). |
+| └─ **Desktop Folder** | Path on the laptop (e.g., `C:\Users\Documents`). |
+| └─ **Status** | 🟢 Syncing / 🟡 Paused / 🔴 Error. |
+| └─ **Last Sync** | Timestamp of the last successful sync. |
+| └─ **Pause/Resume Button** | Toggles the sync pair. |
+| └─ **History Button** | Opens sync history. |
+| └─ **Delete Button** | Removes the sync pair. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Card Slide** | New sync pair cards slide in from the right. |
+| **Status Pulse** | 🟢 Syncing status pulses when active. |
+| **Progress Bar** | Shows a progress bar when syncing. |
+| **Delete Shrink** | Deleting a card shrinks it before it disappears. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Add Pair** | Opens a folder picker to select a phone folder. |
+| **Tap Pause/Resume** | Pauses or resumes the sync pair. |
+| **Tap History** | Opens the sync history screen. |
+| **Tap Delete** | Removes the sync pair (with confirmation). |
+| **Pull to Refresh** | Refreshes the sync status of all pairs. |
+
+### 🔄 State Changes
+| State | What Happens |
+| :--- | :--- |
+| **Syncing** | 🟢 Status shows "Syncing" with a progress bar. |
+| **Paused** | 🟡 Status shows "Paused". |
+| **Error** | 🔴 Status shows the error message. |
+| **Idle** | Shows "🟢 Up to date" with the last sync timestamp. |
+
+---
+
+## SCREEN 9: BATTERY HEALTH SCREEN
+
+### 🎯 Purpose
+- Show detailed battery statistics.
+- Monitor battery health, temperature, and charging status.
+- Provide historical data via graphs.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  🔋  Battery Health                  │
+│                                      │
+│           ╭──────────╮              │
+│          ╱   █████████╲             │
+│          │   █████████ │   87%      │
+│          │   █████████ │             │
+│          ╲   █████████ ╱             │
+│           ╰──────────╯              │
+│              🟢 Good                  │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  Temperature      32°C      │    │
+│  │  Voltage         4.2V      │    │
+│  │  Charge Cycles   456       │    │
+│  │  Health %        92%       │    │
+│  │  Capacity       4800 mAh   │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  📊  History                         │
+│  ┌─────────────────────────────┐    │
+│  │   Temperature  ██████████    │    │
+│  │   ████████████              │    │
+│  │   ██████                    │    │
+│  │   ██████████████            │    │
+│  └─────────────────────────────┘    │
+│  Last 24 hours   [7d] [30d] [Export]│
+│                                      │
+│  ⚠️  Alerts                         │
+│  ✅ Battery temperature is normal.   │
+│                                      │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Battery Gauge** | Circular gauge showing current percentage. |
+| **Health Status** | 🟢 Good / 🟡 Fair / 🔴 Poor (with color). |
+| **Stats Cards** | Temperature (°C), Voltage (V), Charge Cycles, Health %, Capacity (mAh). |
+| **History Graph** | Line chart showing temperature and voltage over time. |
+| **Time Range** | Last 24 hours / 7 days / 30 days. |
+| **Export Button** | Exports battery data as CSV. |
+| **Alerts** | Warnings if temperature > 45°C or health < 80%. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Gauge Fill** | The circular gauge fills from 0% to current percentage. |
+| **Number Counter** | Numbers count up when the screen loads. |
+| **Graph Draw** | The line chart draws from left to right. |
+| **Alert Pulse** | Alerts pulse gently when displayed. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Time Range** | Changes the graph time range. |
+| **Tap Export** | Exports battery data as CSV. |
+| **Pull to Refresh** | Updates the battery data. |
+
+---
+
+## SCREEN 10: M-PESA TRACKER SCREEN
+
+### 🎯 Purpose
+- Track all M-Pesa transactions.
+- View summary analytics and transaction history.
+- Export transactions for record-keeping.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  💰  M-Pesa Tracker                  │
+│  [🔍 Search...]  [▼ Filter]  [⋯]   │
+├──────────────────────────────────────┤
+│                                      │
+│  ┌──────────┐ ┌──────────┐          │
+│  │  Sent     │ │ Received │          │
+│  │  KES 12,500│ │ KES 8,200│          │
+│  └──────────┘ └──────────┘          │
+│  ┌──────────┐ ┌──────────┐          │
+│  │  Net      │ │  Count   │          │
+│  │ -KES 4,300│ │   23     │          │
+│  └──────────┘ └──────────┘          │
+│                                      │
+│  📊  Monthly Chart                   │
+│  ┌─────────────────────────────┐    │
+│  │  ██████████                  │    │
+│  │  ████████                    │    │
+│  │  ██████████████              │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  📋  Transactions                    │
+│  ┌─────────────────────────────┐    │
+│  │  📤 Sent    KES 500         │    │
+│  │  Mary       Today 2:30 PM   │    │
+│  ├─────────────────────────────┤    │
+│  │  📥 Received KES 1,000     │    │
+│  │  John       Today 10:15 AM  │    │
+│  ├─────────────────────────────┤    │
+│  │  📤 Sent    KES 200         │    │
+│  │  Peter      Yesterday 5:20 PM│    │
+│  └─────────────────────────────┘    │
+│                                      │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Summary Cards** | Sent, Received, Net, Count (transactions). |
+| **Monthly Chart** | Bar chart showing monthly spending/receiving. |
+| **Transaction List** | Each transaction has: |
+| └─ **Icon** | 📤 Sent / 📥 Received / 🔄 Reversed. |
+| └─ **Amount** | KES amount. |
+| └─ **Sender/Recipient** | Name or number. |
+| └─ **Timestamp** | Date and time. |
+| **Filter** | Filter by Sent/Received/All. |
+| **Export** | Export as CSV/PDF. |
+| **Sync** | Manual sync with desktop M-Pesa data. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Card Flip** | Summary cards flip to show the number. |
+| **Chart Draw** | The bar chart draws from bottom to top. |
+| **Transaction Slide** | New transactions slide in from the right. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Filter** | Opens a dropdown with Sent/Received/All. |
+| **Tap Export** | Exports transactions as CSV/PDF. |
+| **Tap Sync** | Manually syncs with desktop data. |
+| **Tap Transaction** | Shows transaction details. |
+
+---
+
+## SCREEN 11: SIGNAL LOGGER SCREEN
+
+### 🎯 Purpose
+- Monitor cellular signal strength.
+- Log signal data over time.
+- Detect dead zones.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  📡  Signal Logger                   │
+│  🔴  Recording (24 min)              │
+│                                      │
+│  ┌──────────────┐                    │
+│  │  -75 dBm     │                    │
+│  │  📶📶📶📶     │  4G               │
+│  │  Safaricom   │                    │
+│  └──────────────┘                    │
+│                                      │
+│  📊  Signal History                  │
+│  ┌─────────────────────────────┐    │
+│  │  ██████████                  │    │
+│  │  ████████                    │    │
+│  │  ██████████████              │    │
+│  │  ██                          │    │
+│  └─────────────────────────────┘    │
+│  Last hour   [24h] [7d] [Export]    │
+│                                      │
+│  📍  Dead Zones Detected: 2          │
+│  ┌─────────────────────────────┐    │
+│  │  📍  Living room             │    │
+│  │  Signal: -95 dBm            │    │
+│  │  Detected: 3 days ago       │    │
+│  └─────────────────────────────┘    │
+│  ┌─────────────────────────────┐    │
+│  │  📍  Kitchen                 │    │
+│  │  Signal: -105 dBm           │    │
+│  │  Detected: 1 week ago       │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  [⬛  Start]  [⏹  Stop]  [🗑️ Clear]│
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Signal Status** | Shows current signal strength in dBm and bars. |
+| **Network Info** | Carrier (Safaricom/Airtel), Network type (4G/3G/2G), Cell tower ID. |
+| **History Graph** | Line chart showing signal strength over time. |
+| **Time Range** | Last hour / 24 hours / 7 days / 30 days. |
+| **Dead Zones List** | Locations with weak signal. |
+| **Export Button** | Exports signal data as CSV. |
+| **Start/Stop Button** | Toggles signal logging. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Signal Bars** | The signal bars animate to show current strength. |
+| **Graph Draw** | The line chart draws from left to right. |
+| **Dead Zone Alert** | When a dead zone is detected, a red card slides in. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Time Range** | Changes the graph time range. |
+| **Tap Start** | Starts logging signal data. |
+| **Tap Stop** | Stops logging signal data. |
+| **Tap Export** | Exports signal data as CSV. |
+| **Tap Clear** | Clears all signal data (with confirmation). |
+
+---
+
+## SCREEN 12: SMS & CALL LOG ARCHIVE SCREEN
+
+### 🎯 Purpose
+- View and manage backed-up SMS and call logs.
+- Search, filter, and export data.
+- Sync with desktop backup.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  💬  SMS & Call Log Archive          │
+│  [SMS] [Calls] [Combined]           │
+│  [🔍 Search...]  [▼ Filter]  [⋯]   │
+├──────────────────────────────────────┤
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  📤  Mary                   │    │
+│  │  "Hey, are you coming?"      │    │
+│  │  ⏱  Today 2:30 PM          │    │
+│  ├─────────────────────────────┤    │
+│  │  📤  Safaricom              │    │
+│  │  "Your M-PESA withdrawal..."│    │
+│  │  ⏱  Today 10:15 AM         │    │
+│  ├─────────────────────────────┤    │
+│  │  📥  John                   │    │
+│  │  "I'll be late"             │    │
+│  │  ⏱  Yesterday 5:20 PM      │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  [📥 Backup Now]  [📤 Export CSV]   │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Tabs** | SMS / Calls / Combined. |
+| **Search Bar** | Search by sender, contact, or keyword. |
+| **Filter Button** | Filter by date range. |
+| **More Button** | Opens a menu: "Backup Now", "Export CSV", "Export PDF", "Restore". |
+| **Message/Call List** | Each item has: sender/contact, message text or call type, timestamp, read status (SMS). |
+| **Backup Now Button** | Manual backup to desktop. |
+| **Export Button** | Export as CSV/PDF. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Tab Transition** | Tabs slide horizontally when switching. |
+| **List Item Slide** | New items slide in from the right. |
+| **Search Highlight** | Matching search terms are highlighted in yellow. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Tab** | Switches between SMS, Calls, Combined. |
+| **Tap Search** | Opens the keyboard and filters in real-time. |
+| **Tap Filter** | Opens a date range picker. |
+| **Tap Backup Now** | Triggers a manual backup to desktop. |
+| **Tap Export** | Exports as CSV/PDF. |
+| **Tap Restore** | Restores from a desktop backup. |
+
+---
+
+## SCREEN 13: NOTIFICATION FILTER SCREEN
+
+### 🎯 Purpose
+- Select which apps can send notifications to the desktop.
+- Block specific apps or system notifications.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  🚫  Notification Filter             │
+│  [🔍 Search...]  [✓ All]  [Save]   │
+├──────────────────────────────────────┤
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  📱 WhatsApp           [ON] │    │
+│  ├─────────────────────────────┤    │
+│  │  💬 SMS               [ON] │    │
+│  ├─────────────────────────────┤    │
+│  │  📱 Telegram          [OFF]│    │
+│  ├─────────────────────────────┤    │
+│  │  🔔 Gmail             [ON] │    │
+│  ├─────────────────────────────┤    │
+│  │  💰 M-Pesa            [ON] │    │
+│  ├─────────────────────────────┤    │
+│  │  🔔 System Updates    [OFF]│    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  🚫  Block System Apps      │    │
+│  └─────────────────────────────┘    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Title Bar** | "Notification Filter". |
+| **Search Bar** | "🔍 Search..." → search for apps. |
+| **Select All Button** | "✓ All" → enables/disables all apps. |
+| **Save Button** | Saves the filter settings. |
+| **App List** | Each row has: app icon, app name, toggle switch. |
+| **Block System Apps** | Toggle to block all system notifications. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Toggle Animation** | Switches slide with a spring effect. |
+| **Search Filter** | Apps fade in/out based on the search query. |
+| **Save Confirmation** | A green toast slides in: "Filter saved". |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Toggle** | Enables/disables notification mirroring for that app. |
+| **Tap Select All** | Toggles all apps on/off. |
+| **Tap Save** | Saves the filter settings. |
+| **Tap Block System Apps** | Blocks all system notifications. |
+
+---
+
+## SCREEN 14: DEBLOAT GUARDIAN SCREEN
+
+### 🎯 Purpose
+- View and manage system packages (MIUI bloatware).
+- Safely uninstall bloatware via desktop.
+- Restore uninstalled packages.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  🛡️  Debloat Guardian               │
+│  [🔍 Search...]  [▼ Filter]         │
+│  [🗑️ Uninstall] [💾 Backup]         │
+├──────────────────────────────────────┤
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  ✅ ☑️ com.miui.security    │    │
+│  │     🔒 Critical system      │    │
+│  ├─────────────────────────────┤    │
+│  │  ✅ ☑️ com.android.chrome   │    │
+│  │     🟢 Safe to remove      │    │
+│  ├─────────────────────────────┤    │
+│  │  ✅ ☑️ com.xiaomi.glgm     │    │
+│  │     🟡 Use with caution    │    │
+│  ├─────────────────────────────┤    │
+│  │  ✅ ☑️ com.miui.notes       │    │
+│  │     🟢 Safe to remove      │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  Status: 12 packages selected.       │
+│  🔴 Caution: Some selected packages  │
+│  may affect system stability.       │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Title Bar** | "Debloat Guardian". |
+| **Search Bar** | "🔍 Search..." → search for packages. |
+| **Filter Button** | Filter by: Safe / Caution / Critical / All. |
+| **Uninstall Button** | "🗑️ Uninstall" → uninstalls selected packages. |
+| **Backup Button** | "💾 Backup" → backs up selected APKs. |
+| **Package List** | Each row has: checkbox, app name, package name, status color (🟢/🟡/🔴). |
+| **Status Bar** | Shows selected count and caution message. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Checkbox Animation** | Checkbox animates when selected. |
+| **Uninstall Progress** | Shows a progress bar when uninstalling. |
+| **Status Color** | Status colors pulse gently. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Checkbox** | Selects/unselects a package. |
+| **Tap Uninstall** | Uninstalls selected packages (with confirmation). |
+| **Tap Backup** | Backs up selected APKs. |
+| **Tap Filter** | Filters the package list. |
+
+---
+
+## SCREEN 15: PAIRING & DEVICES SCREEN
+
+### 🎯 Purpose
+- Manage paired devices (desktops, laptops).
+- View device information.
+- Pair new devices via code or QR code.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  🔗  Pairing & Devices               │
+│                                      │
+│  📱  Current Device                  │
+│  ┌─────────────────────────────┐    │
+│  │  Device ID: ABC-123-XYZ     │    │
+│  │  Device Name: Redmi 14 C   │    │
+│  │  Android: 14 (MIUI 14)     │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  💻  Paired Devices                  │
+│  ┌─────────────────────────────┐    │
+│  │  🟢  My Laptop              │    │
+│  │  192.168.1.100             │    │
+│  │  Paired: 2 days ago         │    │
+│  │  [Remove]                   │    │
+│  ├─────────────────────────────┤    │
+│  │  🟡  Work PC                │    │
+│  │  10.0.0.5                  │    │
+│  │  Paired: 1 week ago        │    │
+│  │  [Remove]                   │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  🔗  Pair New Device                 │
+│  ┌─────────────────────────────┐    │
+│  │  Enter Code: [___] [Pair]   │    │
+│  │  [📷 Scan QR]  [📱 Show QR]│    │
+│  └─────────────────────────────┘    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Current Device** | Device ID, Device Name, Android version, MIUI version, Build number. |
+| **Paired Devices List** | Each device has: status (🟢/🟡/🔴), name, IP address, paired date, Remove button. |
+| **Pair New Device** | Enter Code (6-digit input), Pair button, Scan QR button, Show QR button. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Device Card** | Cards slide in from the right. |
+| **Pairing Progress** | Shows a progress spinner while pairing. |
+| **QR Code** | QR code fades in with a scale-up effect. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Remove** | Removes the paired device (with confirmation). |
+| **Tap Pair** | Attempts to pair with the entered code. |
+| **Tap Scan QR** | Opens the camera to scan a QR code. |
+| **Tap Show QR** | Shows a QR code for easy pairing. |
+
+---
+
+## SCREEN 16: LOG VIEWER SCREEN
+
+### 🎯 Purpose
+- View debug logs for troubleshooting.
+- Export logs for sharing.
+- Filter logs by level.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  📋  Log Viewer                      │
+│  [All ▼]  [🔍 Search...]  [⋯]      │
+├──────────────────────────────────────┤
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  [INFO] 2026-08-01 14:30:22│    │
+│  │  Service started successfully│    │
+│  ├─────────────────────────────┤    │
+│  │  [WARN] 2026-08-01 14:32:15│    │
+│  │  Connection retry 3/5       │    │
+│  ├─────────────────────────────┤    │
+│  │  [ERROR]2026-08-01 14:35:02│    │
+│  │  Failed to sync: timeout   │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  [📤 Export]  [🗑️ Clear]    │    │
+│  │  [🔄 Auto-Refresh: ON]     │    │
+│  └─────────────────────────────┘    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Filter Dropdown** | All / Info / Warning / Error. |
+| **Search Bar** | "🔍 Search..." → search logs by keyword. |
+| **More Button** | Opens a menu: "Export Logs", "Share Logs". |
+| **Log List** | Each log has: log level (color-coded), timestamp, message. |
+| **Export Button** | Exports logs to a file. |
+| **Clear Button** | Clears all logs. |
+| **Auto-Refresh Toggle** | Toggles auto-refresh for live logs. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Log Entry Slide** | New log entries slide in from the right. |
+| **Search Highlight** | Matching search terms are highlighted. |
+| **Auto-Refresh Pulse** | Auto-refresh indicator pulses gently. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Filter** | Filters logs by level. |
+| **Tap Search** | Searches logs by keyword. |
+| **Tap Export** | Exports logs to a file. |
+| **Tap Share** | Shares logs via email, WhatsApp, etc. |
+| **Tap Clear** | Clears all logs (with confirmation). |
+| **Toggle Auto-Refresh** | Enables/disables auto-refresh. |
+
+---
+
+## SCREEN 17: MAINTENANCE MODE SCREEN
+
+### 🎯 Purpose
+- Schedule and run maintenance tasks.
+- Clear cache, compress photos, backup databases.
+- Reboot the phone.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  🔧  Maintenance Mode                │
+│  📅  Schedule                        │
+│  ┌─────────────────────────────┐    │
+│  │  Enable Scheduled           │    │
+│  │  Time: 2:00 AM  [🔄]        │    │
+│  │  Days: [M] [T] [W] [T] [F] │    │
+│  │        [S] [S]              │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  📋  Tasks                           │
+│  ┌─────────────────────────────┐    │
+│  │  ☑️ Clear App Cache          │    │
+│  │  ☑️ Compress Photos          │    │
+│  │  ☑️ Backup WhatsApp DB      │    │
+│  │  ☑️ Delete Old Files (30d)  │    │
+│  │  ☐  Reboot Phone           │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  [▶️ Run Now]  [⏹ Stop]    │    │
+│  │  Last Run: Today 2:00 AM   │    │
+│  │  Status: ✅ Completed      │    │
+│  └─────────────────────────────┘    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Schedule Section** | Enable toggle, Time picker, Days checkboxes. |
+| **Tasks Section** | List of tasks with checkboxes. |
+| **Actions Section** | Run Now button, Stop button (while running). |
+| **Status** | Last run timestamp, Status (Running/Completed/Failed). |
+| **Logs Button** | View maintenance logs. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Task Checkbox** | Checkbox animates when selected. |
+| **Progress Spinner** | Shows a progress spinner while running. |
+| **Status Update** | Status updates with a slide transition. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Enable** | Enables/disables scheduled maintenance. |
+| **Tap Time** | Opens a time picker. |
+| **Tap Day** | Toggles the day. |
+| **Tap Task** | Toggles the task. |
+| **Tap Run Now** | Runs maintenance immediately. |
+| **Tap Stop** | Stops maintenance (if running). |
+| **Tap Logs** | Opens the Log Viewer. |
+
+---
+
+## SCREEN 18: APK INSTALLER SCREEN
+
+### 🎯 Purpose
+- Batch install APKs received from the desktop.
+- View installation status and history.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  📦  APK Installer                   │
+│  2 APKs pending                      │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  📱 WhatsApp                │    │
+│  │  v2.23.10.12               │    │
+│  │  [████████████░░░░░] 75%   │    │
+│  │  Status: Installing...     │    │
+│  │  [Cancel]                  │    │
+│  ├─────────────────────────────┤    │
+│  │  📱 Telegram                │    │
+│  │  v9.15.0                   │    │
+│  │  [████████████████████] 100%│    │
+│  │  Status: ✅ Installed     │    │
+│  │  [Clear]                   │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  [📥 Install All]  [🗑️ Clear] │    │
+│  │  [📋 History]               │    │
+│  └─────────────────────────────┘    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Title Bar** | "APK Installer" with pending count. |
+| **APK List** | Each APK has: app name, version, progress bar, status (Pending/Installing/Installed/Failed), Cancel button. |
+| **Install All Button** | Installs all pending APKs. |
+| **Clear Button** | Clears completed installations. |
+| **History Button** | Opens installation history. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Progress Bar** | Progress bar animates as the APK installs. |
+| **Status Change** | Status text updates with a fade transition. |
+| **Card Slide** | New APKs slide in from the right. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Install All** | Installs all pending APKs. |
+| **Tap Cancel** | Cancels an ongoing installation. |
+| **Tap Clear** | Removes completed installations. |
+| **Tap History** | Opens installation history. |
+
+---
+
+## SCREEN 19: USSD SHORTCUT SCREEN
+
+### 🎯 Purpose
+- Send USSD codes and view responses.
+- Save favorite USSD codes for quick access.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  ⭐  USSD Shortcut                   │
+│                                      │
+│  ⚡  Quick Codes                     │
+│  ┌─────────────────────────────┐    │
+│  │  📱 *544#   Check Balance   │    │
+│  ├─────────────────────────────┤    │
+│  │  💰 *455#   M-Pesa           │    │
+│  ├─────────────────────────────┤    │
+│  │  📞 *100#   Airtime         │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ✏️  Custom USSD                     │
+│  ┌─────────────────────────────┐    │
+│  │  [*544#]  [Send]  [⭐ Save]│    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  💬  Response                        │
+│  ┌─────────────────────────────┐    │
+│  │  Your account balance is    │    │
+│  │  KES 1,250.00              │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  📋  History (Last 10)              │
+│  ┌─────────────────────────────┐    │
+│  │  *544#  Today 2:30 PM      │    │
+│  │  *455#  Today 10:15 AM     │    │
+│  └─────────────────────────────┘    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Quick Codes** | List of common USSD codes with labels. |
+| **Custom USSD** | Input field + Send button + Save (favorite) button. |
+| **Response Box** | Shows the USSD response. |
+| **History** | Last 10 sent USSD codes and responses. |
+| **Favorites** | List of saved USSD codes. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Response Fade** | The USSD response fades in. |
+| **Send Progress** | Shows a progress spinner while sending. |
+| **History Slide** | New history items slide in. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Quick Code** | Fills the custom USSD input with the code. |
+| **Tap Send** | Sends the USSD code to the phone. |
+| **Tap Save** | Saves the code as a favorite. |
+| **Tap History** | Views the full history. |
+
+---
+
+## SCREEN 20: CAMERA REMOTE SCREEN
+
+### 🎯 Purpose
+- Use the phone's camera as a wireless webcam.
+- Stream video to the desktop.
+- Adjust camera settings.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  📷  Camera Remote                   │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │   Camera Preview             │    │
+│  │   (Live Feed)               │    │
+│  │                             │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  🔄  Front/Back Switch               │
+│  ⚡  Flash: OFF                     │
+│  📐  Resolution: 1080p               │
+│  🎞️  FPS: 30                        │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  [▶️ Start Streaming]       │    │
+│  │  Status: 📤 Streaming to PC │    │
+│  └─────────────────────────────┘    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **Camera Preview** | Live camera feed. |
+| **Toggle Camera** | Front/Rear camera switch. |
+| **Flash Toggle** | Flash on/off. |
+| **Resolution Dropdown** | 720p / 1080p / 4K. |
+| **FPS Dropdown** | 30 FPS / 60 FPS. |
+| **Start/Stop Button** | Starts/stops streaming to desktop. |
+| **Status** | Shows streaming status. |
+| **Settings** | Brightness, contrast, zoom sliders. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Preview Startup** | The camera preview fades in. |
+| **Streaming Pulse** | A red indicator pulses when streaming. |
+| **Settings Slide** | Settings sliders slide in when tapped. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Toggle Camera** | Switches between front and rear cameras. |
+| **Tap Flash** | Toggles flash on/off. |
+| **Tap Resolution** | Opens the resolution dropdown. |
+| **Tap Start Streaming** | Starts streaming to desktop. |
+| **Tap Stop Streaming** | Stops streaming to desktop. |
+
+---
+
+## SCREEN 21: ABOUT SCREEN
+
+### 🎯 Purpose
+- Show app information and legal details.
+- Check for updates.
+- View open-source licenses.
+
+### 📐 Layout
+```
+┌──────────────────────────────────────┐
+│  ℹ️  About LiteLink                  │
+│                                      │
+│         ┌──────────────┐           │
+│         │   LOGO       │           │
+│         └──────────────┘           │
+│                                      │
+│       LiteLink Companion             │
+│       v1.0.0 (Build #100)            │
+│       Developed by [Your Name]      │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  GitHub                     │    │
+│  ├─────────────────────────────┤    │
+│  │  Website                    │    │
+│  ├─────────────────────────────┤    │
+│  │  Report Bug                 │    │
+│  ├─────────────────────────────┤    │
+│  │  Request Feature            │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  Privacy Policy              │    │
+│  │  Terms of Service           │    │
+│  │  Open Source Licenses       │    │
+│  └─────────────────────────────┘    │
+│                                      │
+│  ┌─────────────────────────────┐    │
+│  │  [📤 Share App]              │    │
+│  └─────────────────────────────┘    │
+└──────────────────────────────────────┘
+```
+
+### 📋 UI Elements
+| Element | Description |
+| :--- | :--- |
+| **App Logo** | LiteLink logo (centered). |
+| **App Name** | "LiteLink Companion". |
+| **Version** | v1.0.0 (Build #100). |
+| **Developer** | "Developed by [Your Name]". |
+| **Links** | GitHub, Website, Report Bug, Request Feature. |
+| **Legal** | Privacy Policy, Terms of Service, Open Source Licenses. |
+| **Share App Button** | Shares the app with others. |
+| **Check for Updates** | Manual update check. |
+
+### 🎬 Animations
+| Animation | Description |
+| :--- | :--- |
+| **Logo Fade-In** | The logo fades in with a scale-up effect. |
+| **Link Slide** | Links slide in from the left. |
+
+### 🖱️ User Interactions
+| Action | Result |
+| :--- | :--- |
+| **Tap Link** | Opens the link in a browser. |
+| **Tap Share App** | Opens a share dialog. |
+| **Tap Check Updates** | Checks for app updates. |
+
+---
+
+## 📊 Final Summary: All 21 Screens
+
+| # | Screen Name | Purpose |
+| :--- | :--- | :--- |
+| 1 | Splash Screen | Loading and initialization. |
+| 2 | Onboarding Screen | First-time setup. |
+| 3 | Permission Request | System permission dialogs. |
+| 4 | Home Screen | Dashboard with status and quick actions. |
+| 5 | Settings Screen | All configuration options. |
+| 6 | Notifications Screen | View and manage notifications. |
+| 7 | Files Screen | Browse and manage files. |
+| 8 | Sync Folders Screen | Manage folder sync pairs. |
+| 9 | Battery Health Screen | Monitor battery statistics. |
+| 10 | M-Pesa Tracker Screen | Track M-Pesa transactions. |
+| 11 | Signal Logger Screen | Log cellular signal strength. |
+| 12 | SMS & Call Log Archive | View and export SMS/call logs. |
+| 13 | Notification Filter Screen | Select apps to block. |
+| 14 | Debloat Guardian Screen | Manage MIUI bloatware. |
+| 15 | Pairing & Devices Screen | Manage paired devices. |
+| 16 | Log Viewer Screen | View debug logs. |
+| 17 | Maintenance Mode Screen | Schedule maintenance tasks. |
+| 18 | APK Installer Screen | Batch install APKs. |
+| 19 | USSD Shortcut Screen | Send USSD codes. |
+| 20 | Camera Remote Screen | Use phone as webcam. |
+| 21 | About Screen | App info and legal details. |
+
+---
+
+## 🚀 Build Order (Companion App)
+
+| Phase | Screens | Priority |
+| :--- | :--- | :--- |
+| **Phase 1** | 1 (Splash), 2 (Onboarding), 3 (Permissions), 4 (Home), 5 (Settings) | 🔴 High |
+| **Phase 2** | 6 (Notifications), 7 (Files), 8 (Sync Folders) | 🔴 High |
+| **Phase 3** | 13 (Filter), 16 (Log Viewer), 21 (About) | 🟡 Medium |
+| **Phase 4** | 9 (Battery), 11 (Signal), 12 (SMS/Call), 10 (M-Pesa) | 🟡 Medium |
+| **Phase 5** | 14 (Debloat), 15 (Pairing), 17 (Maintenance) | 🟡 Medium |
+| **Phase 6** | 18 (APK Installer), 19 (USSD), 20 (Camera) | 🟢 Low |
+
+---
+
+## 🎯 Your Decision
+
+**Now you have the complete 21-screen inventory with full descriptions, UI elements, animations, interactions, and state changes.**
+
+Here is what I need from you:
+
+1. **Which phase do you want to start with?** (Phase 1, 2, etc.)
+2. **Do you want me to code ALL 21 screens in one go?** (I can give you the entire project source code with all screens, navigation, and logic.)
+3. **Or do you want me to focus on Phase 1 first?** (Splash, Onboarding, Permissions, Home, Settings.)
+
+---
+
+**Tell me your choice, and I will write the complete, production-ready Kotlin code for that phase or the entire app.**

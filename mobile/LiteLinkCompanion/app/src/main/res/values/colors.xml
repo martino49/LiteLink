@@ -12,4 +12,5 @@
     <color name="pill_green">#DCEDC8</color>
     <color name="pill_red">#FFCDD2</color>
     <color name="pill_grey">#ECEFF1</color>
+    <color name="ic_launcher_background">#FFFFFF</color>
 </resources>

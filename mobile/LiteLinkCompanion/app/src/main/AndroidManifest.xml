@@ -36,14 +36,17 @@
 
     <application
         android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:label="LiteLink"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.LiteLink.NoActionBar">
 
         <activity
-            android:name=".MainActivity"
-            android:exported="true">
+            android:name=".SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.LiteLink.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -51,11 +54,107 @@
         </activity>
 
         <activity
+            android:name=".OnboardingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true" />
+
+        <activity
             android:name=".PhoneActivity"
             android:exported="false" />
 
         <activity
             android:name=".RemoteControlActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".NotificationFilterActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".LogViewerActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AboutActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SyncFoldersActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".PairingActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".BatteryHealthActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MpesaActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SignalLoggerActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ArchiveActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".DebloatActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MaintenanceActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ApkInstallerActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".UssdActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".CameraRemoteActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".MediaControllerActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".PcPowerActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".PcFilesActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ScreenMirrorActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".SecondScreenActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".GameControllerActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".VoiceCommandActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".ClipboardHistoryActivity"
             android:exported="false" />
 
         <service
@@ -93,6 +192,16 @@
         <receiver
             android:name="com.yourname.litelinkcompanion.commands.InstallReceiver"
             android:exported="false" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
 
     </application>
 

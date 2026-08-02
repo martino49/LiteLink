@@ -48,6 +48,9 @@ object WebSocketManager {
     /** Receives desktop commands: (command name, request id, params). */
     @Volatile
     var onCommand: ((String, String, JSONObject) -> Unit)? = null
+    var onPcResult: ((String, Boolean, JSONObject) -> Unit)? = null
+    var onPcNotification: ((JSONObject) -> Unit)? = null
+    var onScreenFrame: ((JSONObject) -> Unit)? = null
 
     /** Receives incoming file chunks: (file id, offset, decoded bytes). */
     @Volatile
@@ -68,6 +71,10 @@ object WebSocketManager {
     @get:Synchronized
     val currentHost: String?
         get() = hosts.getOrNull(hostIndex)
+
+    private fun log(level: String, message: String) {
+        appContext?.let { LogStore.log(it, level, message) }
+    }
 
     fun init(context: Context) {
         if (appContext == null) {
@@ -126,6 +133,7 @@ object WebSocketManager {
         val request = Request.Builder().url("wss://$host:$PORT").build()
         val c = client ?: buildClient().also { client = it }
         ws = c.newWebSocket(request, listener)
+        log(LogStore.LEVEL_INFO, "Connecting to $host:$PORT")
         Log.d(TAG, "Connecting wss://$host:$PORT")
     }
 
@@ -144,13 +152,28 @@ object WebSocketManager {
                         paired = true
                         retryDelay = 5000L
                         Log.d(TAG, "Pairing OK")
+                        log(LogStore.LEVEL_INFO, "Paired with ${hosts[hostIndex]}")
                         setConnected(true)
+                        sendDeviceInfo()
                     }
                     "cmd" -> {
                         val cmd = data.optString("cmd")
                         val id = data.optString("id")
                         val params = data.optJSONObject("params") ?: JSONObject()
                         onCommand?.invoke(cmd, id, params)
+                    }
+                    "pc_result" -> {
+                        onPcResult?.invoke(
+                            data.optString("cmd"),
+                            data.optBoolean("ok"),
+                            data.optJSONObject("data") ?: JSONObject()
+                        )
+                    }
+                    "pc_notification" -> {
+                        onPcNotification?.invoke(data)
+                    }
+                    "screen_frame" -> {
+                        onScreenFrame?.invoke(data)
                     }
                     "file" -> handleFileMessage(data)
                     else -> Log.d(TAG, "Message: $text")
@@ -162,12 +185,14 @@ object WebSocketManager {
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
             Log.e(TAG, "WebSocket failure: ${t.message}")
+            log(LogStore.LEVEL_ERROR, "Connection failed: ${t.message}")
             setConnected(false)
             handleFail()
         }
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             Log.d(TAG, "WebSocket closed: $reason")
+            log(LogStore.LEVEL_WARN, "Connection closed: $reason")
             setConnected(false)
             handleFail()
         }
@@ -196,6 +221,7 @@ object WebSocketManager {
             reconnecting.set(false)
             if (shouldReconnect) {
                 Log.d(TAG, "Attempting reconnect (backoff ${retryDelay / 1000}s)")
+                log(LogStore.LEVEL_WARN, "Reconnecting (backoff ${retryDelay / 1000}s)")
                 openSocket()
                 retryDelay = (retryDelay * 2).coerceAtMost(60000L)
             }
@@ -221,9 +247,30 @@ object WebSocketManager {
         send(json)
     }
 
+    /** Push phone details to the PC (model, Android, app version, adb port). */
+    fun sendDeviceInfo() {
+        val json = JSONObject().apply {
+            put("type", "device_info")
+            put("model", android.os.Build.MODEL)
+            put("brand", android.os.Build.MANUFACTURER)
+            put("android", android.os.Build.VERSION.RELEASE)
+            put("sdk", android.os.Build.VERSION.SDK_INT)
+            put("app_version", "1.0")
+            put("adb_port", 5555)
+            put("timestamp", System.currentTimeMillis())
+        }
+        send(json)
+    }
+
     fun sendPointer(action: String, x: Double, y: Double) {
         val params = JSONObject().put("action", action).put("x", x).put("y", y)
         sendInput("pointer", params)
+    }
+
+    /** Relative pointer movement (gentle trackpad) — dx/dy normalized deltas. */
+    fun sendPointerRel(dx: Double, dy: Double, sensitivity: Double = 1.0) {
+        val params = JSONObject().put("dx", dx).put("dy", dy).put("sensitivity", sensitivity)
+        sendInput("pointer_rel", params)
     }
 
     fun sendScroll(dx: Double, dy: Double) {
@@ -236,9 +283,25 @@ object WebSocketManager {
         sendInput("key", params)
     }
 
+    /** Send a trackpad gesture (right_click / two_finger_scroll / three_finger_swipe / pinch). */
+    fun sendGesture(type: String, dx: Double, dy: Double) {
+        val params = JSONObject().put("type", type).put("dx", dx).put("dy", dy)
+        sendInput("gesture", params)
+    }
+
     fun sendText(text: String) {
         val params = JSONObject().put("text", text)
         sendInput("text", params)
+    }
+
+    /** Send a phone->PC remote-control command (media/power/files/mirror/ring). */
+    fun sendPc(cmd: String, params: JSONObject = JSONObject()) {
+        val json = JSONObject().apply {
+            put("type", "pc")
+            put("cmd", cmd)
+            put("params", params)
+        }
+        send(json)
     }
 
     private fun sendInput(kind: String, params: JSONObject) {

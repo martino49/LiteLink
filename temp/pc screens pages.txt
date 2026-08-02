@@ -1,0 +1,718 @@
+Excellent. Since we have the complete Android screen inventory, now let's do the **same detailed breakdown** for the **LiteLink Desktop App (Python + PySide6)**.
+
+I will list **every page** with:
+- **Full description**
+- **UI elements** (what the user sees)
+- **Animations** (transitions, micro-interactions)
+- **User interactions** (what happens when they click/type)
+- **State changes** (loading, empty, error states)
+
+---
+
+# 🖥️ LITELINK DESKTOP APP – COMPLETE PAGE INVENTORY (15 Pages)
+
+---
+
+## 🌐 SYSTEM PAGES (3 Pages)
+*These are the first pages the user sees and system-level screens.*
+
+---
+
+### PAGE 1: LAUNCHER / SPLASH WINDOW
+*The first window that appears when you launch the desktop app.*
+
+| Element | Description |
+| :--- | :--- |
+| **App Logo** | LiteLink logo (centered, large). |
+| **App Name** | "LiteLink" (below the logo). |
+| **Loading Bar** | A horizontal progress bar showing initialization progress. |
+| **Status Text** | Shows: "Initializing..." → "Checking ADB..." → "Starting WebSocket server..." → "Ready". |
+| **Version Number** | Shows app version at the bottom (e.g., "v1.0.0"). |
+| **Auto-Transition** | After initialization completes, automatically transitions to the Dashboard Page (Page 4). |
+
+**What happens during the splash screen:**
+1. Checks if ADB and scrcpy binaries exist in the `bin/` folder.
+2. Starts the WebSocket server on `0.0.0.0:8765`.
+3. Loads saved settings from `config.json` or Windows Registry.
+4. Attempts to auto-connect to the last known phone.
+
+**Animations:**
+| Animation | Description |
+| :--- | :--- |
+| **Logo Fade-In** | Logo fades in over 800ms with a subtle scale-up. |
+| **Progress Bar** | The progress bar fills smoothly. |
+| **Status Text Fade** | Status text fades in/out when changing messages. |
+| **Smooth Transition** | The splash window fades out and transitions to the main window. |
+
+---
+
+### PAGE 2: ONBOARDING WIZARD
+*Shown only the first time the user launches the app.*
+
+| Step | Description |
+| :--- | :--- |
+| **Step 1: Welcome** | "Welcome to LiteLink!" with an illustration of a phone connected to a laptop. |
+| **Step 2: Install ADB/scrcpy** | Checks if ADB and scrcpy are installed. If not, provides download links and installation instructions. |
+| **Step 3: Connect Phone** | Instructions to enable USB Debugging on the phone. Button: "Check Connection". |
+| **Step 4: Wireless Setup** | Instructions to enable wireless ADB. Button: "Enable Wireless". |
+| **Step 5: Complete** | "All set! You're ready to use LiteLink." Button: "Get Started". |
+
+**Animations:**
+| Animation | Description |
+| :--- | :--- |
+| **Step Transition** | Horizontal slide transition between steps. |
+| **Success Checkmark** | A green checkmark spins in when a step is completed. |
+| **Button Hover** | Buttons change color and scale slightly on hover. |
+
+---
+
+### PAGE 3: SETUP WIZARD (Reconnection)
+*When the phone reboots and needs to re-enable wireless ADB.*
+
+| Element | Description |
+| :--- | :--- |
+| **Status Message** | "Phone reboot detected. Please plug in your USB cable to re-enable wireless ADB." |
+| **Step 1** | "🔌 Plug in your Redmi 14 C via USB." |
+| **Step 2** | "🔍 Detecting phone..." (shows progress spinner). |
+| **Step 3** | "📶 Enabling wireless ADB on port 5555..." |
+| **Step 4** | "✅ Wireless ADB enabled! You can unplug your phone now." |
+| **Button** | "Reconnect" (initiates the process). |
+| **Skip Button** | "Skip for now" (goes to dashboard, but shows a warning banner). |
+
+---
+
+## 🖥️ MAIN PAGES (6 Pages)
+*These are the primary pages the user navigates between using the sidebar.*
+
+---
+
+### PAGE 4: DASHBOARD (Home)
+*The landing page after the splash screen.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  [●] LiteLink      🔗 192.168.1.5  |  🔋 87%  |  📱 Redmi 14 C  │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  📊  DASHBOARD                                                       │
+│                                                                      │
+│  ╔══════════════════════════════════════════════════════════════╗    │
+│  ║  🟢  Connected                 🔔 23   📁 12   📱 19%      ║    │
+│  ║  Latency: 15ms                 Notifications  Syncs  Storage║    │
+│  ╚══════════════════════════════════════════════════════════════╝    │
+│                                                                      │
+│  🚀  QUICK ACTIONS                                                  │
+│  ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐ ┌──────┐                    │
+│  │🖥️    │ │🔔    │ │📁    │ │🔍    │ │⚙️    │                    │
+│  │Mirror │ │Notify │ │Files │ │Find  │ │Settings│                   │
+│  └──────┘ └──────┘ └──────┘ └──────┘ └──────┘                    │
+│                                                                      │
+│  📋  RECENT ACTIVITY                                                │
+│  ┌─────────────────────────────────────────────────────────┐        │
+│  │  📱  WhatsApp: "Hey, are you coming?"     2 min ago   │        │
+│  ├─────────────────────────────────────────────────────────┤        │
+│  │  📁  Sync: notes.txt → Phone             5 min ago    │        │
+│  ├─────────────────────────────────────────────────────────┤        │
+│  │  🔔  3 new notifications received         8 min ago    │        │
+│  └─────────────────────────────────────────────────────────┘        │
+│                                                                      │
+│  [🖥️] [🔔] [📁] [🛠️] [⚙️]  (Sidebar Navigation)                  │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**UI Elements:**
+| Element | Description |
+| :--- | :--- |
+| **Status Bar** | Connection status, IP address, phone battery %, phone model. |
+| **Status Cards** | Connected status, Notification count, Sync count, Storage %. |
+| **Quick Actions** | Mirror, Notifications, Files, Find Phone, Settings. |
+| **Recent Activity** | List of recent events (notifications, syncs, etc.). |
+| **Pull to Refresh** | Press `F5` or click refresh button to update all data. |
+
+**Animations:**
+| Animation | Description |
+| :--- | :--- |
+| **Status Card Pulse** | Connection status dot pulses green when connected. |
+| **Quick Action Hover** | Quick action buttons change color on hover. |
+| **Activity Slide** | New activity items slide in from the right. |
+| **Data Update** | Counts update with a subtle bounce animation. |
+
+**Interactions:**
+| Action | Result |
+| :--- | :--- |
+| **Click Mirror** | Opens the Mirror Page (Page 7). |
+| **Click Notify** | Opens the Notifications Page (Page 8). |
+| **Click Files** | Opens the Files Page (Page 9). |
+| **Click Find** | Rings the phone (Find My Phone). |
+| **Click Settings** | Opens the Settings Page (Page 6). |
+| **Press F5** | Refreshes all data. |
+| **Click Activity Item** | Opens the relevant page. |
+
+---
+
+### PAGE 5: DASHBOARD (Detailed View)
+*Alternative dashboard with more detailed information. Accessible via a toggle or from the sidebar.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  [●] LiteLink      🔗 192.168.1.5  |  🔋 87%  |  📱 Redmi 14 C  │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  📊  DASHBOARD (Detailed)                                            │
+│                                                                      │
+│  ╔══════════════════════════════════════════════════════════════╗    │
+│  ║  Phone Model:   Redmi 14 C                                  ║    │
+│  ║  Android:       14 (MIUI 14)                               ║    │
+│  ║  Battery:       87% (32°C, 4.2V)                          ║    │
+│  ║  Storage:       12.3 GB used / 64 GB (19%)                ║    │
+│  ║  WiFi IP:       192.168.1.5                               ║    │
+│  ║  Connection:    🟢 Connected (15ms latency)               ║    │
+│  ╚══════════════════════════════════════════════════════════════╝    │
+│                                                                      │
+│  📊  Storage Breakdown                                              │
+│  ████████████░░░░░░░░░░░░░░░░░░░░░░  19%                            │
+│  Apps: 8.2 GB  |  Photos: 2.1 GB  |  Videos: 1.5 GB  |  Other: 0.5 GB│
+│                                                                      │
+│  🔋  Battery History                                                │
+│  ┌─────────────────────────────────────────────────────────┐        │
+│  │   Temperature  ██████████                              │        │
+│  │   ████████████                                        │        │
+│  │   ██████                                              │        │
+│  │   ██████████████                                      │        │
+│  └─────────────────────────────────────────────────────────┘        │
+│                                                                      │
+│  [🖥️] [🔔] [📁] [🛠️] [⚙️]  (Sidebar Navigation)                  │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PAGE 6: SETTINGS PAGE
+*All configuration options for the desktop app.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  ⚙️  SETTINGS                                                       │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ═══ CONNECTION ═══                                                 │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  Mode:              [Local ▼]                               │    │
+│  │  WebSocket Port:    8765                                   │    │
+│  │  VPS Host:          litelink-relay.com                    │    │
+│  │  VPS Port:          8765                                   │    │
+│  │  Auto-Connect:      [✅]                                   │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+│  ═══ NOTIFICATIONS ═══                                              │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  Show Popups:        [✅]                                   │    │
+│  │  Show Full Text:     [✅]                                   │    │
+│  │  Play Sound:         [❌]                                   │    │
+│  │  Popup Duration:     5 seconds                             │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+│  ═══ FOLDER SYNC ═══                                                │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  Auto-Sync:          [✅]                                   │    │
+│  │  Sync Interval:      Real-time                             │    │
+│  │  Max File Size:      100 MB                                │    │
+│  │  Low-Data Mode:      [❌]                                   │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+│  ═══ APPEARANCE ═══                                                 │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  Theme:              [Dark ▼]                               │    │
+│  │  Font Size:          [Medium ▼]                             │    │
+│  │  Language:           [English ▼]                            │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+│  ═══ ADVANCED ═══                                                   │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  Verbose Logging:    [❌]                                   │    │
+│  │  View Logs:          [📋]                                   │    │
+│  │  Reset All Settings: [🔴]                                   │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+│  ═══ ABOUT ═══                                                      │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  Version:            v1.0.0                                │    │
+│  │  Check for Updates:  [▶️]                                   │    │
+│  │  Open Source Licenses: [📄]                               │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+│  [🖥️] [🔔] [📁] [🛠️] [⚙️]  (Sidebar Navigation)                  │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**UI Elements:**
+| Section | Elements |
+| :--- | :--- |
+| **Connection** | Mode (Local/Cloud), WebSocket Port, VPS Host, VPS Port, Auto-Connect toggle. |
+| **Notifications** | Show Popups toggle, Show Full Text toggle, Play Sound toggle, Popup Duration dropdown. |
+| **Folder Sync** | Auto-Sync toggle, Sync Interval dropdown, Max File Size input, Low-Data Mode toggle. |
+| **Appearance** | Theme dropdown (Dark/Light/System), Font Size dropdown, Language dropdown. |
+| **Advanced** | Verbose Logging toggle, View Logs button, Reset All Settings button (with confirmation). |
+| **About** | Version, Check for Updates button, Open Source Licenses button. |
+
+---
+
+### PAGE 7: MIRROR PAGE
+*The primary workspace for controlling your phone from your PC.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  🖥️  MIRROR                                                         │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │                                                             │    │
+│  │                                                             │    │
+│  │            [Phone Screen Mirror - Embedded]                  │    │
+│  │                                                             │    │
+│  │                                                             │    │
+│  │                                                             │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  [📴 Screen Off]  [🔄 Rotate]  [📸 Screenshot]  [▶️ Record] │    │
+│  │  [⛶ Fullscreen]  [🔊 Volume]  [🔄 Refresh]               │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                                                      │
+│  FPS: 60  |  Resolution: 1080x2400  |  Latency: 15ms              │
+│                                                                      │
+│  [🖥️] [🔔] [📁] [🛠️] [⚙️]  (Sidebar Navigation)                  │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**UI Elements:**
+| Element | Description |
+| :--- | :--- |
+| **Embedded scrcpy Window** | The phone's screen displayed in a window. |
+| **Floating Toolbar** | (Overlaid on top of the mirror) |
+| └─ **Screen Off** | Toggle to turn off the phone's physical screen. |
+| └─ **Rotate** | Rotates the phone screen (portrait/landscape). |
+| └─ **Screenshot** | Takes a screenshot and saves it to the laptop. |
+| └─ **Record** | Starts/stops screen recording (saves to laptop). |
+| └─ **Fullscreen** | Expands to take over the entire screen. |
+| └─ **Volume** | Adjusts phone volume. |
+| └─ **Refresh** | Reconnects scrcpy if it's lagging. |
+| **Info Bar** | Shows FPS, resolution, and latency. |
+
+**Animations:**
+| Animation | Description |
+| :--- | :--- |
+| **Mirror Startup** | The mirror window fades in. |
+| **Screen Off Toggle** | The phone screen turns off with a smooth animation. |
+| **Rotation** | The screen rotates smoothly. |
+| **Fullscreen Transition** | Fullscreen mode transitions smoothly. |
+
+**Interactions:**
+| Action | Result |
+| :--- | :--- |
+| **Click Mirror Screen** | Opens the phone's screen in the embedded window. |
+| **Click Screen Off** | Turns off the phone's physical screen (battery saver). |
+| **Click Rotate** | Rotates the phone screen. |
+| **Click Screenshot** | Takes a screenshot and saves it. |
+| **Click Record** | Starts/stops screen recording. |
+| **Click Fullscreen** | Enters fullscreen mode. |
+| **Click Volume** | Adjusts phone volume. |
+| **Click Refresh** | Reconnects the scrcpy session. |
+| **Click + Drag** | Interacts with the phone screen. |
+
+---
+
+### PAGE 8: NOTIFICATIONS PAGE
+*Shows all captured notifications from the phone.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  🔔  NOTIFICATIONS                                  [23]  [⋯]      │
+│  [🔍 Search...]  [▼ Filter]  [🗑️ Clear All]                       │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │  📱 WhatsApp                        2 min ago               │   │
+│  │  Mary                                                        │   │
+│  │  "Hey, are you coming?"                                     │   │
+│  │  ┌──────────────────────────────────────────────────────┐   │   │
+│  │  │  Reply: [___________________________] [📤 Send]    │   │   │
+│  │  └──────────────────────────────────────────────────────┘   │   │
+│  │  [Dismiss]  [Mark as Read]                                  │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │  💬 SMS                         15 min ago                  │   │
+│  │  Safaricom                                                   │   │
+│  │  "M-PESA: KES 500 received from Mary"                       │   │
+│  │  [Dismiss]                                                   │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │  📱 Telegram                     1 hour ago                 │   │
+│  │  John                                                        │   │
+│  │  "📷 Image attached"                                         │   │
+│  │  [Reply]  [Dismiss]                                          │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │  🔔  No more notifications                                   │   │
+│  └──────────────────────────────────────────────────────────────┘   │
+│                                                                      │
+│  [🖥️] [🔔] [📁] [🛠️] [⚙️]  (Sidebar Navigation)                  │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**UI Elements:**
+| Element | Description |
+| :--- | :--- |
+| **Title Bar** | "Notifications" with count badge and more menu. |
+| **Search Bar** | "🔍 Search..." → filter notifications by keyword. |
+| **Filter Button** | "▼ Filter" → opens a dropdown to filter by app. |
+| **Clear All Button** | "🗑️ Clear All" → dismisses all notifications. |
+| **Notification Cards** | Each notification has: |
+| └─ **App Icon** | The app's icon. |
+| └─ **App Name** | e.g., "WhatsApp". |
+| └─ **Title** | Contact name or subject. |
+| └─ **Message Text** | The full message. |
+| └─ **Timestamp** | Time since the notification was received. |
+| └─ **Reply Box** | (Expands when clicked) Text input + Send button. |
+| └─ **Dismiss Button** | Swipes the notification away on the phone. |
+| └─ **Mark as Read Button** | Marks the notification as read. |
+
+**Animations:**
+| Animation | Description |
+| :--- | :--- |
+| **Card Slide** | New cards slide in from the right. |
+| **Reply Expand** | The reply box expands smoothly. |
+| **Search Highlight** | Matching search terms are highlighted in yellow. |
+| **Dismiss Fade** | Cards fade out when dismissed. |
+
+**Interactions:**
+| Action | Result |
+| :--- | :--- |
+| **Click Search** | Filters notifications in real-time. |
+| **Click Filter** | Opens a dropdown with apps to filter by. |
+| **Click Clear All** | Dismisses all notifications (with confirmation). |
+| **Click Reply** | Expands to show a text input. |
+| **Click Send** | Sends the reply to the phone. |
+| **Click Dismiss** | Swipes the notification away on the phone. |
+| **Click Mark as Read** | Marks the notification as read. |
+
+---
+
+### PAGE 9: FILES PAGE
+*Browse and manage files on your phone.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  📁  FILES                                                          │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  📱 Phone: /sdcard/Download/   💻 Laptop: C:\Documents\      │ │
+│  ├────────────────────────────────────────────────────────────────┤ │
+│  │  ┌─────────────┐  ┌─────────────┐                            │ │
+│  │  │ 📂 Documents │  │ 📂 Projects │                            │ │
+│  │  │ 📂 Music     │  │ 📄 notes.txt│                            │ │
+│  │  │ 📂 Pictures  │  │ 📄 report.pdf│                           │ │
+│  │  │ 📄 photo.jpg │  │            │                            │ │
+│  │  └─────────────┘  └─────────────┘                            │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  ═══ SYNC FOLDERS ═══                                               │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  📂 /sdcard/Docs  ↔  C:\Documents    🟢 Syncing             │ │
+│  │  📂 /sdcard/Photos ↔  D:\Photos       🟢 Syncing             │ │
+│  │  [➕ Add Pair]  [Pause All]  [Sync All]                      │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  Transfer Queue:                                                    │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  📄 photo.jpg  →  Phone    ████████████░░░░░░  65%           │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  [🖥️] [🔔] [📁] [🛠️] [⚙️]  (Sidebar Navigation)                  │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**UI Elements:**
+| Element | Description |
+| :--- | :--- |
+| **Dual-Pane File Explorer** | |
+| └─ **Left Pane** | Phone's storage (Internal + SD Card). |
+| └─ **Right Pane** | Laptop's file system. |
+| **Sync Folders Section** | |
+| └─ **Sync Pair List** | Shows all sync pairs with status. |
+| └─ **Add Pair Button** | Creates a new sync pair. |
+| └─ **Pause All Button** | Pauses all sync pairs. |
+| └─ **Sync All Button** | Manually syncs all pairs. |
+| **Transfer Queue** | Shows ongoing file transfers with progress bars. |
+
+**Animations:**
+| Animation | Description |
+| :--- | :--- |
+| **File List Fade** | Files fade in when a folder is opened. |
+| **Drag Highlight** | Files highlight when dragged. |
+| **Progress Bar** | Progress bars animate during transfers. |
+| **Sync Status Pulse** | Syncing status pulses when active. |
+
+**Interactions:**
+| Action | Result |
+| :--- | :--- |
+| **Click Phone Pane** | Navigates through phone storage. |
+| **Click Laptop Pane** | Navigates through laptop storage. |
+| **Drag + Drop** | Copies files between panes. |
+| **Right-Click File** | Opens context menu: Copy, Move, Delete, Rename, Share. |
+| **Click Add Pair** | Opens a dialog to create a sync pair. |
+| **Click Sync All** | Manually syncs all pairs. |
+
+---
+
+### PAGE 10: TOOLS PAGE
+*A grid of advanced tools and utilities.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  🛠️  TOOLS                                                          │
+├──────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │ │
+│  │  │  🛡️     │ │  🔋     │ │  🔍     │ │  📶     │        │ │
+│  │  │ Debloat  │ │ Battery │ │ Find    │ │ Tether  │        │ │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │ │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │ │
+│  │  │  💬     │ │  💰     │ │  ⭐     │ │  📡     │        │ │
+│  │  │ SMS     │ │ M-Pesa  │ │ USSD    │ │ Signal  │        │ │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │ │
+│  │  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐        │ │
+│  │  │  📦     │ │  🔧     │ │  📷     │ │  🔄     │        │ │
+│  │  │ APK     │ │ Mainten.│ │ Camera  │ │ Reboot  │        │ │
+│  │  └──────────┘ └──────────┘ └──────────┘ └──────────┘        │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  [🖥️] [🔔] [📁] [🛠️] [⚙️]  (Sidebar Navigation)                  │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+**UI Elements:**
+| Tool | Description |
+| :--- | :--- |
+| **Debloat Guardian** | Opens a dialog to view and uninstall MIUI bloatware. |
+| **Battery Health** | Opens a dialog showing detailed battery stats. |
+| **Find My Phone** | Rings the phone at maximum volume. |
+| **Tether Toggle** | One-click enable/disable mobile data hotspot. |
+| **SMS Backup** | Backs up SMS and call logs to the laptop. |
+| **M-Pesa Tracker** | Opens a dashboard showing M-Pesa transactions. |
+| **USSD Shortcut** | Opens a dialog to send USSD codes. |
+| **Signal Logger** | Opens a graph showing signal strength over time. |
+| **APK Installer** | Batch install APKs. |
+| **Maintenance** | Schedules automated maintenance tasks. |
+| **Camera Remote** | Uses the phone as a wireless webcam. |
+| **Reboot Phone** | Reboots the phone remotely. |
+
+**Animations:**
+| Animation | Description |
+| :--- | :--- |
+| **Tool Hover** | Tools scale up slightly on hover. |
+| **Grid Load** | Tools fade in with a staggered delay. |
+| **Success Toast** | Success messages slide in from the bottom. |
+
+**Interactions:**
+| Action | Result |
+| :--- | :--- |
+| **Click Tool** | Opens the relevant dialog or performs the action. |
+
+---
+
+## 🔧 DIALOGS & OVERLAYS (6 Pages)
+*These pop up on top of the main pages.*
+
+---
+
+### PAGE 11: DEBLOAT GUARDIAN DIALOG
+*Pops up from the Tools page.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  🛡️  DEBLOAT GUARDIAN                                              │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  [🔍 Search...]  [▼ Filter]  [💾 Backup APKs]                │ │
+│  ├────────────────────────────────────────────────────────────────┤ │
+│  │  ✅ ☑️ com.miui.security          🔒 Critical system         │ │
+│  │  ✅ ☑️ com.android.chrome          🟢 Safe to remove          │ │
+│  │  ✅ ☑️ com.xiaomi.glgm             🟡 Use with caution        │ │
+│  │  ✅ ☑️ com.miui.notes              🟢 Safe to remove          │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  Status: 12 packages selected.                                      │
+│  🔴 Caution: Some selected packages may affect system stability.    │
+│                                                                      │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  [🗑️ Uninstall Selected]  [🔄 Restore All]  [Cancel]          │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PAGE 12: BATTERY HEALTH DIALOG
+*Pops up from the Tools page.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  🔋  BATTERY HEALTH                                                 │
+│                                                                      │
+│           ╭──────────╮                                              │
+│          ╱   █████████╲                                             │
+│          │   █████████ │   87%                                      │
+│          │   █████████ │                                             │
+│          ╲   █████████ ╱                                             │
+│           ╰──────────╯                                              │
+│              🟢 Good                                                 │
+│                                                                      │
+│  Temperature: 32°C    Voltage: 4.2V    Charge Cycles: 456          │
+│  Health %: 92%        Capacity: 4800 mAh                           │
+│                                                                      │
+│  📊  History                                                         │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │   ██████████                                                  │ │
+│  │   ████████                                                    │ │
+│  │   ██████████████                                              │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│  [Export CSV]  [Close]                                             │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PAGE 13: M-PESA TRACKER DIALOG
+*Pops up from the Tools page.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  💰  M-PESA TRACKER                                                 │
+│                                                                      │
+│  ┌──────────┐ ┌──────────┐ ┌──────────┐ ┌──────────┐              │
+│  │  Sent    │ │ Received │ │  Net     │ │ Count   │              │
+│  │ KES 12,500│ │ KES 8,200│ │ -4,300   │ │   23    │              │
+│  └──────────┘ └──────────┘ └──────────┘ └──────────┘              │
+│                                                                      │
+│  📋  Transactions                                                    │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  📤 Sent   KES 500   Mary        Today 2:30 PM               │ │
+│  │  📥 Received KES 1,000 John      Today 10:15 AM              │ │
+│  │  📤 Sent   KES 200   Peter       Yesterday 5:20 PM           │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  [Export CSV]  [Sync]  [Close]                                      │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PAGE 14: USSD SHORTCUT DIALOG
+*Pops up from the Tools page.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  ⭐  USSD SHORTCUT                                                  │
+│                                                                      │
+│  ⚡  Quick Codes                                                     │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  📱 *544#   Check Balance                                      │ │
+│  │  💰 *455#   M-Pesa                                             │ │
+│  │  📞 *100#   Airtime                                            │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  ✏️  Custom USSD                                                     │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  [*544#]  [Send]  [⭐ Save]                                   │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  💬  Response                                                        │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  Your account balance is KES 1,250.00                         │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  [Close]                                                            │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+### PAGE 15: MAINTENANCE MODE DIALOG
+*Pops up from the Tools page.*
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│  🔧  MAINTENANCE MODE                                               │
+│                                                                      │
+│  📅  Schedule                                                        │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  Enable Scheduled: [✅]                                        │ │
+│  │  Time: 2:00 AM   Days: [M] [T] [W] [T] [F] [S] [S]          │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  📋  Tasks                                                           │
+│  ┌────────────────────────────────────────────────────────────────┐ │
+│  │  ☑️ Clear App Cache                                            │ │
+│  │  ☑️ Compress Photos                                            │ │
+│  │  ☑️ Backup WhatsApp DB                                         │ │
+│  │  ☑️ Delete Old Files (30d)                                     │ │
+│  │  ☐  Reboot Phone                                               │ │
+│  └────────────────────────────────────────────────────────────────┘ │
+│                                                                      │
+│  [▶️ Run Now]  [⏹ Stop]  [Close]                                   │
+│  Last Run: Today 2:00 AM  │  Status: ✅ Completed                   │
+└──────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📊 Final Summary: All 15 Desktop Pages
+
+| # | Page Name | Type | Purpose |
+| :--- | :--- | :--- | :--- |
+| 1 | Launcher / Splash Window | System | Loading and initialization. |
+| 2 | Onboarding Wizard | System | First-time setup. |
+| 3 | Setup Wizard (Reconnection) | System | Re-enable wireless ADB after reboot. |
+| 4 | Dashboard (Home) | Main | Landing page with status and quick actions. |
+| 5 | Dashboard (Detailed View) | Main | Detailed device information. |
+| 6 | Settings Page | Main | All configuration options. |
+| 7 | Mirror Page | Main | Screen mirroring with toolbar. |
+| 8 | Notifications Page | Main | View and manage notifications. |
+| 9 | Files Page | Main | Dual-pane file explorer and folder sync. |
+| 10 | Tools Page | Main | Grid of advanced tools. |
+| 11 | Debloat Guardian Dialog | Dialog | Manage MIUI bloatware. |
+| 12 | Battery Health Dialog | Dialog | Monitor battery statistics. |
+| 13 | M-Pesa Tracker Dialog | Dialog | Track M-Pesa transactions. |
+| 14 | USSD Shortcut Dialog | Dialog | Send USSD codes. |
+| 15 | Maintenance Mode Dialog | Dialog | Schedule maintenance tasks. |
+
+---
+
+## 🚀 Build Order (Desktop App)
+
+| Phase | Pages | Priority |
+| :--- | :--- | :--- |
+| **Phase 1** | 1 (Splash), 4 (Dashboard), 6 (Settings), 7 (Mirror) | 🔴 High |
+| **Phase 2** | 8 (Notifications), 9 (Files) | 🔴 High |
+| **Phase 3** | 10 (Tools), 11 (Debloat), 12 (Battery) | 🟡 Medium |
+| **Phase 4** | 13 (M-Pesa), 14 (USSD), 15 (Maintenance) | 🟡 Medium |
+| **Phase 5** | 2 (Onboarding), 3 (Setup), 5 (Detailed Dashboard) | 🟢 Low |
+
+---
+
+## 🎯 Your Decision
+
+**Now you have the complete 15-page inventory for the desktop app with full descriptions, UI elements, animations, interactions, and state changes.**
+
+Here is what I need from you:
+
+1. **Which phase do you want to start with?** (Phase 1, 2, etc.)
+2. **Do you want me to code ALL 15 pages in one go?** (I can give you the entire project source code with all pages, navigation, and logic.)
+3. **Or do you want me to focus on Phase 1 first?** (Splash, Dashboard, Settings, Mirror.)
+
+---
+
+**Tell me your choice, and I will write the complete, production-ready PySide6 Python code for that phase or the entire desktop app.**

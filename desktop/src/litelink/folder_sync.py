@@ -14,12 +14,18 @@ from watchdog.events import FileSystemEventHandler
 
 
 class SyncHandler(FileSystemEventHandler):
-    """Watches a folder and sends file changes to the phone."""
+    """Watches a folder and sends file changes to the phone.
 
-    def __init__(self, local_root, phone_root, websocket, direction="bidirectional"):
+    Changes are debounced (500 ms), deduplicated by MD5, then handed to the
+    ``sender`` callable as a JSON payload dict (already encoded to base64).
+    The GUI plugs its bridge into ``sender`` so events actually reach the
+    phone over the WebSocket.
+    """
+
+    def __init__(self, local_root, phone_root, sender, direction="bidirectional"):
         self.local_root = os.path.abspath(local_root)
         self.phone_root = phone_root
-        self.ws = websocket
+        self.sender = sender
         self.direction = direction
         self.hashes = {}
         self._timers = {}
@@ -60,7 +66,7 @@ class SyncHandler(FileSystemEventHandler):
         self._timers.pop(local_path, None)
 
         if event_type == "deleted":
-            msg = json.dumps({"type": "sync_delete", "path": remote_path})
+            payload = {"type": "sync_delete", "path": remote_path}
         else:
             if not os.path.exists(local_path):
                 return
@@ -70,28 +76,33 @@ class SyncHandler(FileSystemEventHandler):
             if h == self.hashes.get(local_path):
                 return
             self.hashes[local_path] = h
-            msg = json.dumps({
+            payload = {
                 "type": "sync_file",
                 "path": remote_path,
                 "data": base64.b64encode(data).decode(),
-            })
+            }
 
-        # TODO: send via websocket (needs async bridge)
-        print(f"[Sync] {event_type} {rel_path} ({len(msg)} bytes)")
+        if self.sender:
+            try:
+                self.sender(payload)
+            except Exception as e:
+                print(f"[Sync] send failed: {e}")
+        else:
+            print(f"[Sync] {event_type} {rel_path} ({len(json.dumps(payload))} bytes)")
 
 
 class FolderSync:
     """Manages watchdog observer for a sync pair."""
 
-    def __init__(self, local_path, phone_path, websocket, direction="bidirectional"):
+    def __init__(self, local_path, phone_path, sender, direction="bidirectional"):
         self.local = local_path
         self.phone = phone_path
-        self.ws = websocket
+        self.sender = sender
         self.direction = direction
         self._observer = None
 
     def start(self):
-        handler = SyncHandler(self.local, self.phone, self.ws, self.direction)
+        handler = SyncHandler(self.local, self.phone, self.sender, self.direction)
         self._observer = Observer()
         self._observer.schedule(handler, self.local, recursive=True)
         self._observer.start()

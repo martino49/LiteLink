@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/ink">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/gameToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/card"
+        app:title="Game Controller"
+        app:navigationIcon="@drawable/ic_back"
+        app:titleTextColor="@color/ink" />
+
+    <TextView
+        android:id="@+id/gameStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Not connected — gamepad maps to keyboard keys."
+        android:textSize="13sp"
+        android:textColor="@color/muted"
+        android:padding="12dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="20dp">
+
+        <!-- D-pad -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/gameUp"
+                android:layout_width="72dp"
+                android:layout_height="52dp"
+                android:text="▲"
+                android:textSize="18sp"
+                android:backgroundTint="@color/teal_500" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/gameLeft"
+                    android:layout_width="52dp"
+                    android:layout_height="72dp"
+                    android:text="◀"
+                    android:textSize="18sp"
+                    android:backgroundTint="@color/teal_500" />
+
+                <Button
+                    android:id="@+id/gameRight"
+                    android:layout_width="52dp"
+                    android:layout_height="72dp"
+                    android:text="▶"
+                    android:textSize="18sp"
+                    android:backgroundTint="@color/teal_500" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/gameDown"
+                android:layout_width="72dp"
+                android:layout_height="52dp"
+                android:text="▼"
+                android:textSize="18sp"
+                android:backgroundTint="@color/teal_500" />
+        </LinearLayout>
+
+        <!-- Action buttons -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <Button
+                android:id="@+id/gameY"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:text="Y"
+                android:textStyle="bold"
+                android:backgroundTint="@color/teal_700" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/gameX"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="X"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/teal_700" />
+
+                <Button
+                    android:id="@+id/gameB"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:text="B"
+                    android:textStyle="bold"
+                    android:backgroundTint="@color/teal_700" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/gameA"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:text="A"
+                android:textStyle="bold"
+                android:backgroundTint="@color/teal_700" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/gameStart"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Start"
+            android:textSize="13sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/gameSelect"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Select"
+            android:textSize="13sp" />
+    </LinearLayout>
+</LinearLayout>

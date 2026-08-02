@@ -2,9 +2,14 @@
 
 import os
 import shutil
+import sys
 from pathlib import Path
 
-BIN_DIR = Path(__file__).resolve().parent.parent.parent / "bin"
+if getattr(sys, "frozen", False):
+    # PyInstaller onefile: tools are unpacked next to the exe resources.
+    BIN_DIR = Path(sys._MEIPASS) / "bin"
+else:
+    BIN_DIR = Path(__file__).resolve().parent.parent.parent / "bin"
 SCRCPY_DIR = BIN_DIR / "scrcpy-win64-v4.1"
 
 

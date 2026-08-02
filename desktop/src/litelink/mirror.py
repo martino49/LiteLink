@@ -15,6 +15,12 @@ def is_available():
     return find_scrcpy() is not None
 
 
+def is_running():
+    """True if a scrcpy process is currently active."""
+    proc = _ACTIVE.get("proc")
+    return proc is not None and proc.poll() is None
+
+
 def _adb_cmd(adb, serial, *parts):
     cmd = [adb]
     if serial:
@@ -30,6 +36,7 @@ def _screen_state(adb, serial=None):
             _adb_cmd(adb, serial, "shell", "dumpsys", "display"),
             stderr=subprocess.DEVNULL,
             timeout=8,
+            creationflags=subprocess.CREATE_NO_WINDOW,
         ).decode("utf-8", "ignore")
     except Exception:
         return None
@@ -42,6 +49,7 @@ def _send_keyevent(adb, serial, key):
         _adb_cmd(adb, serial, "shell", "input", "keyevent", key),
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
+        creationflags=subprocess.CREATE_NO_WINDOW,
     )
 
 

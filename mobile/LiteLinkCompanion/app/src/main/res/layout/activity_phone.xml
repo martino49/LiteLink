@@ -1,35 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/bg">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/phoneToolbar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/card"
-        app:title="Phone Hub"
-        app:titleTextColor="@color/ink"
-        app:navigationIcon="?attr/homeAsUpIndicator" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/phoneToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/card"
+            app:title="Phone Hub"
+            app:titleTextColor="@color/ink"
+            app:navigationIcon="?attr/homeAsUpIndicator" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNav"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/card"
-        app:elevation="8dp"
-        app:itemIconTint="@color/teal_700"
-        app:itemTextColor="@color/teal_700"
-        app:labelVisibilityMode="labeled"
-        app:menu="@menu/menu_phone" />
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
-</LinearLayout>
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/card"
+            app:elevation="8dp"
+            app:itemIconTint="@color/teal_700"
+            app:itemTextColor="@color/teal_700"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/menu_phone" />
+
+    </LinearLayout>
+
+</FrameLayout>

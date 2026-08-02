@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/maintToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/card"
+            app:title="Maintenance Mode"
+            app:navigationIcon="@drawable/ic_back"
+            app:titleTextColor="@color/ink" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  SCHEDULE  "
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/teal_700"
+                android:letterSpacing="0.12"
+                android:background="@color/pill_grey"
+                android:padding="10dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/card"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.google.android.material.switchmaterial.SwitchMaterial
+                        android:id="@+id/maintScheduledSwitch"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Enable scheduled maintenance"
+                        android:textSize="14sp"
+                        android:textColor="@color/ink" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginTop="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Time"
+                            android:textSize="14sp"
+                            android:textColor="@color/ink" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/maintTimeButton"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:text="02:00 AM"
+                            app:icon="@drawable/ic_dial"
+                            android:textSize="13sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/maintDaysText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="13sp"
+                        android:textColor="@color/muted"
+                        android:layout_marginTop="8dp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  TASKS  "
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:textColor="@color/teal_700"
+                android:letterSpacing="0.12"
+                android:background="@color/pill_grey"
+                android:padding="10dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/card"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/maintTaskCache"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Clear app cache"
+                        android:textSize="14sp"
+                        android:textColor="@color/ink"
+                        android:checked="true" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/maintTaskPhotos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Compress photos"
+                        android:textSize="14sp"
+                        android:textColor="@color/ink"
+                        android:checked="true" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/maintTaskWhatsApp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Backup WhatsApp database"
+                        android:textSize="14sp"
+                        android:textColor="@color/ink"
+                        android:checked="true" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/maintTaskOldFiles"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Delete old files (30d)"
+                        android:textSize="14sp"
+                        android:textColor="@color/ink" />
+
+                    <com.google.android.material.checkbox.MaterialCheckBox
+                        android:id="@+id/maintTaskReboot"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Reboot phone"
+                        android:textSize="14sp"
+                        android:textColor="@color/ink" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/maintDiagnostics"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="13sp"
+                android:textColor="@color/muted"
+                android:background="@color/card"
+                android:padding="14dp"
+                android:layout_marginTop="16dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/maintRunButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Run now"
+                app:icon="@drawable/ic_play"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/maintStatus"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Status: Not run yet"
+                android:textSize="13sp"
+                android:textColor="@color/muted"
+                android:paddingTop="8dp" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

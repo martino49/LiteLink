@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:padding="32dp">
+
+    <ImageView
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:src="@drawable/ic_wifi"
+        android:layout_marginTop="32dp"
+        android:alpha="0.8" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Connect to your laptop"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="@color/ink"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Keep both devices on the same Wi-Fi, then pair."
+        android:textSize="14sp"
+        android:textColor="@color/muted"
+        android:gravity="center"
+        android:layout_marginTop="8dp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="@color/card"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="2dp"
+        android:layout_marginTop="28dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:id="@+id/step1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1.  Open LiteLink on your laptop"
+                android:textSize="14sp"
+                android:textColor="@color/ink" />
+
+            <TextView
+                android:id="@+id/step2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2.  Note the pairing code shown there"
+                android:textSize="14sp"
+                android:textColor="@color/ink"
+                android:layout_marginTop="12dp" />
+
+            <TextView
+                android:id="@+id/step3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3.  Enter the laptop IP and code next"
+                android:textSize="14sp"
+                android:textColor="@color/ink"
+                android:layout_marginTop="12dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You can also tap \u201cScan network\u201d to find the laptop automatically."
+        android:textSize="12sp"
+        android:textColor="@color/muted"
+        android:gravity="center"
+        android:layout_marginTop="16dp" />
+</LinearLayout>
