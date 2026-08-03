@@ -3,6 +3,7 @@
 Runs adb as a subprocess. All functions return structured results.
 """
 
+import os
 import re
 import subprocess
 
@@ -25,10 +26,12 @@ def run_adb_command(command):
         Tuple of (stdout, stderr, returncode)
     """
     full = [adb_binary()] + command
+    kwargs = {}
+    if os.name == "nt":
+        kwargs["creationflags"] = subprocess.CREATE_NO_WINDOW
     try:
         r = subprocess.run(
-            full, capture_output=True, text=True, timeout=10,
-            creationflags=subprocess.CREATE_NO_WINDOW,
+            full, capture_output=True, text=True, timeout=10, **kwargs
         )
         return r.stdout.strip(), r.stderr.strip(), r.returncode
     except subprocess.TimeoutExpired:

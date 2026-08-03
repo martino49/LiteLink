@@ -150,6 +150,56 @@ adb connect <YOUR_PHONE_IP>:5555
 
 ---
 
+## Step 6: Second Screen — Extended Mode (Virtual Display)
+
+**Duplicate mode** mirrors your main screen to the phone. **Extended mode** turns the
+phone into a *real* second display — the PC desktop genuinely grows and you can drag
+windows onto the phone's region. This requires a virtual display so the OS knows
+there is another screen.
+
+### On Windows (Virtual Display Driver)
+
+Download the driver-only package (signature-verified, ~132 KB — no GUI needed):
+
+```
+https://github.com/VirtualDrivers/Virtual-Display-Driver/releases/download/25.7.23/VirtualDisplayDriver-x86.Driver.Only.zip
+```
+
+Or install via winget (admin PowerShell):
+
+```powershell
+winget install VirtualDrivers.Virtual-Display-Driver -e
+```
+
+Manual install from the ZIP:
+
+1. Extract to a folder (contains `MttVDD.dll`, `MttVDD.inf`, `MttVDD.cat`, `vdd_settings.xml`)
+2. Run the included installer `.bat` **as Administrator** to trust the driver certificate
+3. **Device Manager → Display adapters → Action → Add legacy hardware →**
+   **Install from a list (Advanced) → Display adapters → Have Disk → select `MttVDD.inf`**
+4. The virtual monitor now appears in **Settings → Display**. Configure its resolution
+   in `vdd_settings.xml` (e.g. add a 1080x1920 portrait mode for a phone).
+
+### On Linux (X11 — no download needed)
+
+The `xrandr` virtual monitor creates a real extended region to the right of your
+primary screen, no driver required. Example (eDP-1 is the built-in screen):
+
+```bash
+xrandr --setmonitor VIRT-1 1080/1x1920/1+1920+0 none
+xrandr --delmonitor VIRT-1   # to remove it
+```
+
+> **Note:** `xrandr --setmonitor` requires an **X11** session. It does **not** work
+> under Wayland (virtual monitors are compositor-controlled). If your desktop runs
+> Wayland, log in with an X11 session to use Extended mode, or use the
+> Windows Virtual Display Driver instead.
+
+LiteLink's Extended mode then streams that virtual monitor region to the phone
+(duplicate = primary screen, extended = the virtual/second monitor).
+
+---
+
 ## Troubleshooting
 
 | Problem | Solution |
@@ -160,3 +210,4 @@ adb connect <YOUR_PHONE_IP>:5555
 | Companion app disconnects after 30 min | Lock the app in recent apps (see Step 3) |
 | WebSocket connection refused | Check laptop firewall (port 8765) |
 | Notifications show no text | Enable Notification Access in Settings |
+| Extended mode still shows the main screen | No virtual display present — install the VDD driver (Windows) or use an X11 session with `xrandr --setmonitor` (Linux, see Step 6) |

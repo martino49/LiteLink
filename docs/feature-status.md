@@ -86,7 +86,7 @@ Platform: 🖥️ desktop · 📱 companion · 🔗 collaborative
 
 | Feature | Status |
 |---|---|
-| 48–54 Second Screen (PC→phone) | ✅ MJPEG stream + phone viewer + Extended mode + touch + keyboard |
+| 48–54 Second Screen (PC→phone) | ✅ MJPEG stream + phone viewer + Extended mode + touch + keyboard; virtual-display setup documented in `setup.md` Step 6 |
 | 61–71 Trackpad | ✅ gestures + dim + haptic + sensitivity/scroll/invert |
 | 72–75 PC Notifications | ✅ foreground-window → phone + filter + dismiss + reply |
 | 22 Low-Data Mode | ✅ real gating (AC-power check) |

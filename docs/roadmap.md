@@ -74,7 +74,9 @@ The desktop already synthesizes input via Windows `SendInput`. These reuse it.
 ## Phase 7 — PC → Phone (experimental)
 - **46. Second Screen (Duplicate)** — FFmpeg capture → H.264 stream → phone
   player. 🔗
-- **47. Second Screen (Extended)** — Windows Virtual Display Driver + stream. 🔗
+- **47. Second Screen (Extended)** — virtual display driver → real 2nd desktop
+  region streamed to phone. Driver: `VirtualDrivers/Virtual-Display-Driver`
+  (winget / `xrandr --setmonitor` on Linux X11). Setup: `setup.md` Step 6. 🔗
 - **48. PC Notifications (on phone)** — Windows toast capture → phone. 🔗
 
 ## Phase 8 — Experimental input modes

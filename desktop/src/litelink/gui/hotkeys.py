@@ -13,6 +13,7 @@ Default bindings (configurable in settings):
 
 import ctypes
 import logging
+import sys
 import threading
 import time
 
@@ -20,7 +21,7 @@ from PySide6.QtCore import QObject, Signal
 
 log = logging.getLogger("litelink.hotkeys")
 
-user32 = ctypes.WinDLL("user32", use_last_error=True)
+IS_WINDOWS = sys.platform == "win32"
 
 VK_CONTROL = 0x11
 VK_SHIFT = 0x10
@@ -32,6 +33,8 @@ VK_S = 0x53
 
 def _down(vk):
     """True if the key is currently held."""
+    if not IS_WINDOWS:
+        return False
     return bool(user32.GetAsyncKeyState(vk) & 0x8000)
 
 
@@ -77,3 +80,9 @@ class HotkeyManager(QObject):
             except Exception:
                 pass
             time.sleep(0.15)
+
+
+if IS_WINDOWS:
+    user32 = ctypes.WinDLL("user32", use_last_error=True)
+else:
+    user32 = None
